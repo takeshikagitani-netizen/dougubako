@@ -155,7 +155,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
   </section>
 
   <nav class="next" aria-label="関連">
-    <a id="noteLink" href="https://note.com/kagitani"><span>この道具の解説記事（note）</span><b>ファクタリングを使い続けるのは危ないですか</b></a>
+    <a id="noteLink" href="https://note.com/kagitani/n/nfe3a478e2897"><span>この道具の解説記事（note）</span><b>1回だけのつもりで使ったファクタリングを、毎月やめられなくなるのはなぜですか</b></a>
     <a id="consultLink" href="https://takeshikagitani-netizen.github.io/kagitani-consulting/?utm_source=dougubako&amp;utm_medium=tool&amp;utm_campaign=007"><span>資金繰りの手段を、会社ごとに整理したい方へ</span><b>初回30分の枠を用意しています</b></a>
   </nav>
 
@@ -225,7 +225,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
   function valid(s){return !!(s&&typeof s.face==='number'&&typeof s.feeRate==='number'&&typeof s.days==='number')}
   function render(){}
   function onRow(){return false}
-  function clearAll(){state.face=state.feeRate=state.other=state.days=0}
+  function clearAll(){state.face=state.feeRate=state.other=state.days=state.bank=state.times=0}
   function calc(){
     var fee=state.face*state.feeRate/100+state.other, net=state.face-fee, d=state.days, t=d/365;
     var simple=(d>0&&state.feeRate>0)?state.feeRate/t:null, real=(net>0&&d>0&&fee>0)?fee/net/t*100:null;
@@ -239,6 +239,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     var p='手数料'+yen(fee)+'を払って、'+yen(net)+'を'+d+'日早く受け取る計算です。';
     if(state.bank>0)p+='同じ額を年'+state.bank+'%で'+d+'日借りた場合の利息は約'+yen(bankInt)+'で、差は約'+yen(fee-bankInt)+'です。';
     if(state.times>1)p+='1年に'+state.times+'回使うと、手数料は1年で'+yen(yearFee)+'になります。';
+    p+='年15%以上のときは赤い枠で示します。';
     verdict(real<15,'実質の年利は約'+fix1(real)+'%です',p);
   }
 
