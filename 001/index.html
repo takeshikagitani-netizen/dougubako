@@ -156,7 +156,13 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
   <div class="box" id="paidBox" hidden>
     <h2>この道具は「社長の道具箱 第1巻」に収録しました</h2>
     <p class="lead" id="paidMsg"></p>
-    <a class="primary" href="https://note.com/kagitani/magazines">noteのマガジン一覧を見る</a>
+    <a class="primary" id="magBtn" href="https://note.com/kagitani/m/md497c3cd3e33">第1巻（2,500円）をnoteで見る</a>
+    <form id="volForm" novalidate>
+      <label class="f" for="volPw">第1巻をお買い上げの方は、合言葉を入れてください<input id="volPw" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="err" id="volErr"></p>
+      <button type="submit" class="primary">合言葉で開く</button>
+      <p class="example">合言葉は、第1巻の中の記事「第1巻の使い方と合言葉」に書いてあります。1回入れると、このブラウザでは7本とも開きます。</p>
+    </form>
     <p class="example">無料期間中に登録して使い始めた方は、そのときと同じブラウザで開くと、そのままお使いいただけます。</p>
     <p class="example">新しい道具は毎日お昼12時に公開しています。公開から7日間は無料です。</p>
   </div>
@@ -273,7 +279,10 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
   var lastFree=new Date(freeEnd.getTime()-86400000);
   var jp=function(d){var j=new Date(d.getTime()+9*3600000);return (j.getUTCMonth()+1)+'月'+j.getUTCDate()+'日（'+DOW[j.getUTCDay()]+'）'};
   var inFree=now<freeEnd;
-  var claimed=function(){return store(CLAIM_KEY)==='1'};
+  // 第1巻を買った人は合言葉で開く（巻ごとの固定の合言葉。ハッシュで照合し、1回入れたらブラウザに記録）
+  var VOL_KEY='dougubako_vol1', VOL_HASH='838d8bb6fc3ffce891b7e0a975590031e4d5a9a0f62e989901d467f16490a070';
+  var owned=function(){return store(VOL_KEY)==='1'};
+  var claimed=function(){return store(CLAIM_KEY)==='1'||owned()};
   var claim=function(){store(CLAIM_KEY,'1')};
   if(inFree&&store(REG_KEY)==='1'&&!claimed()){claim()}
   var dl=$('deadline');
@@ -281,7 +290,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     var left=Math.max(1,Math.ceil((freeEnd-Math.max(now,freeStart))/86400000));
     dl.innerHTML='<b>無料で使えるのは '+jp(lastFree)+' まで（あと'+left+'日）</b>期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
   }else if(claimed()){
-    dl.innerHTML='<b>無料期間中に使い始めた方は、このブラウザでそのまま無料でお使いいただけます</b>';
+    dl.innerHTML=owned()?'<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>':'<b>無料期間中に使い始めた方は、このブラウザでそのまま無料でお使いいただけます</b>';
   }else{
     dl.innerHTML='<b>この道具は「社長の道具箱 '+VOLUME+'」に収録しました</b>無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。';
   }
@@ -294,6 +303,18 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     if(inFree){setTimeout(function(){$('expaBtn').focus()},50)}
     else{$('regMain').hidden=true;$('paidBox').hidden=false;ev('tool_paid_view')}
   }
+  $('magBtn').onclick=function(){ev('magazine_click')};
+  $('volForm').addEventListener('submit',function(e){
+    e.preventDefault();var pw=$('volPw').value.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).toLowerCase();
+    if(!pw){$('volErr').textContent='合言葉を入れてください。';return}
+    if(!(window.crypto&&crypto.subtle)){$('volErr').textContent='このブラウザでは確かめられません。別のブラウザでお試しください。';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){
+      var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+      if(h!==VOL_HASH){$('volErr').textContent='合言葉が違います。第1巻の記事の合言葉をそのまま入れてください。';ev('volume_pw_error');return}
+      store(VOL_KEY,'1');ev('volume_unlock',{volume:'1'});$('gate').hidden=true;
+      dl.innerHTML='<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>';
+    });
+  });
   // 本線はエキスパのフォーム。送信後に registered.html へ移り、そこで登録済みを記録してこの道具へ戻す
   $('expaBtn').onclick=function(){store('dougubako_return',location.pathname);ev('tool_register_open',{via:'expa'})};
   // 予備：エキスパのフォームが開けないときは、この画面の中で Formspree へ送る
