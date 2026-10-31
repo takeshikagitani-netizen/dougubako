@@ -71,6 +71,9 @@ footer a{color:var(--muted)}
 /* 登録 */
 .gate{position:fixed;inset:0;background:rgba(10,16,26,.55);display:grid;place-items:center;padding:16px;z-index:10}
 .gate[hidden],.gate .box[hidden]{display:none}
+.deadline{margin-top:10px;background:var(--danger-bg);color:var(--ink);border:1px solid var(--danger);border-radius:8px;padding:10px 14px;font-size:14px;max-width:68ch}
+.deadline:empty{display:none}
+.deadline b{display:block;color:var(--danger);font-size:16px}
 a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;border-radius:8px;padding:12px 16px;background:var(--navy);color:var(--surface)}
 .gate .box{background:var(--surface);color:var(--ink);border-radius:12px;max-width:460px;width:100%;padding:24px;display:grid;gap:14px;max-height:100%;overflow:auto}
 .gate h2{font-size:20px}
@@ -87,6 +90,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     <div class="series"><b>001</b><span>社長の道具箱 100日</span></div>
     <h1>3か月資金繰り表</h1>
     <p class="lead">週ごとの入金と支払を入れると、残高が足りなくなる週が赤く出ます。入れた数字はこのブラウザの中にだけ保存され、外には送られません。</p>
+    <p class="deadline" id="deadline"></p>
   </header>
 
   <section class="card settings" aria-label="前提">
@@ -142,15 +146,23 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
 <div class="gate" id="gate" hidden>
   <div class="box" id="regMain">
     <h2>はじめに1回だけ登録してください</h2>
-    <p class="lead">登録すると、この道具を公開日から7日間、無料で使えます。毎日1本公開する新しい道具も、メールでお知らせします。</p>
-    <a class="primary" id="expaBtn" href="https://ex-tri-f1.com/fm/32705/OoJF4yOH">登録フォームを開く（1分）</a>
+    <p class="lead freeMsg"></p>
+    <p class="example">毎日1本公開する新しい道具も、メールでお知らせします。</p>
+    <a class="primary" id="expaBtn" href="https://ex-tri-f1.com/fm/32705/OoJF4yOH">無料のうちに登録して使う（1分）</a>
     <p class="example">登録が終わると、この道具に戻って使えます。</p>
     <p class="example"><a href="#" id="altBtn">フォームが開かないときは、こちらから登録できます</a></p>
     <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
   </div>
+  <div class="box" id="paidBox" hidden>
+    <h2>この道具は「社長の道具箱 第1巻」に収録しました</h2>
+    <p class="lead" id="paidMsg"></p>
+    <a class="primary" href="https://note.com/kagitani/magazines">noteのマガジン一覧を見る</a>
+    <p class="example">無料期間中に登録して使い始めた方は、そのときと同じブラウザで開くと、そのままお使いいただけます。</p>
+    <p class="example">新しい道具は毎日お昼12時に公開しています。公開から7日間は無料です。</p>
+  </div>
   <form class="box" id="regForm" novalidate hidden>
     <h2>はじめに1回だけ登録してください</h2>
-    <p class="lead">登録すると、この道具を公開日から7日間、無料で使えます。毎日1本公開する新しい道具も、メールでお知らせします。</p>
+    <p class="lead freeMsg"></p>
     <label class="f" for="email">メールアドレス<input type="email" id="email" name="email" autocomplete="email" required></label>
     <label class="f" for="role">お立場
       <select id="role" name="role" required>
@@ -164,7 +176,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     </label>
     <label class="check" for="consent"><input type="checkbox" id="consent" name="consent" required><span>鍵谷健からのメール（新しい道具のお知らせ・仕事の話）を受け取ることに同意します。いつでも配信を止められます。</span></label>
     <p class="err" id="regErr"></p>
-    <button type="submit" class="primary" id="regBtn">登録して使う</button>
+    <button type="submit" class="primary" id="regBtn">無料のうちに登録して使う</button>
     <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
   </form>
 </div>
@@ -250,7 +262,38 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
 
   // 登録（1回だけ。?preview=1 のときは出さない）
   var preview=/[?&]preview=1/.test(location.search);
-  if(!preview&&store(REG_KEY)!=='1'){$('gate').hidden=false;setTimeout(function(){$('expaBtn').focus()},50)}
+  // 無料期間：公開日から7日間。期間中に登録して使い始めた人は、そのあとも無料（この道具ごとに記録）。
+  // 8日目からの新しい人には、有料マガジン（巻）の案内を出す。?now=YYYY-MM-DD は動作確認用。
+  var FREE_FROM='2026-11-01', FREE_DAYS=7, VOLUME='第1巻', PRICE='2,500円', CLAIM_KEY='dougubako_claim_'+TOOL;
+  var DOW='日月火水木金土';
+  var nowQ=location.search.match(/[?&]now=(\d{4}-\d{2}-\d{2})/);
+  var now=nowQ?new Date(nowQ[1]+'T12:00:00+09:00'):new Date();
+  var freeStart=new Date(FREE_FROM+'T00:00:00+09:00');
+  var freeEnd=new Date(freeStart.getTime()+FREE_DAYS*86400000); // この時刻から有料
+  var lastFree=new Date(freeEnd.getTime()-86400000);
+  var jp=function(d){var j=new Date(d.getTime()+9*3600000);return (j.getUTCMonth()+1)+'月'+j.getUTCDate()+'日（'+DOW[j.getUTCDay()]+'）'};
+  var inFree=now<freeEnd;
+  var claimed=function(){return store(CLAIM_KEY)==='1'};
+  var claim=function(){store(CLAIM_KEY,'1')};
+  if(inFree&&store(REG_KEY)==='1'&&!claimed()){claim()}
+  var dl=$('deadline');
+  if(inFree){
+    var left=Math.max(1,Math.ceil((freeEnd-Math.max(now,freeStart))/86400000));
+    dl.innerHTML='<b>無料で使えるのは '+jp(lastFree)+' まで（あと'+left+'日）</b>期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  }else if(claimed()){
+    dl.innerHTML='<b>無料期間中に使い始めた方は、このブラウザでそのまま無料でお使いいただけます</b>';
+  }else{
+    dl.innerHTML='<b>この道具は「社長の道具箱 '+VOLUME+'」に収録しました</b>無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。';
+  }
+  [].forEach.call(document.querySelectorAll('.freeMsg'),function(el){
+    el.textContent='この道具は'+jp(lastFree)+'まで無料です。期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  });
+  $('paidMsg').textContent='無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。この道具は、noteの有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'・7本入り）でお使いいただけます。';
+  if(!preview&&!claimed()){
+    $('gate').hidden=false;
+    if(inFree){setTimeout(function(){$('expaBtn').focus()},50)}
+    else{$('regMain').hidden=true;$('paidBox').hidden=false;ev('tool_paid_view')}
+  }
   // 本線はエキスパのフォーム。送信後に registered.html へ移り、そこで登録済みを記録してこの道具へ戻す
   $('expaBtn').onclick=function(){store('dougubako_return',location.pathname);ev('tool_register_open',{via:'expa'})};
   // 予備：エキスパのフォームが開けないときは、この画面の中で Formspree へ送る
@@ -267,10 +310,10 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     fd.append('入口','社長の道具箱 '+TOOL);fd.append('_subject','【社長の道具箱 登録】'+TOOL);
     fetch(FORM,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).then(function(r){
       if(!r.ok)throw new Error('status '+r.status);
-      store(REG_KEY,'1');ev('tool_register',{role:role,revenue:rev});$('gate').hidden=true;
+      store(REG_KEY,'1');claim();ev('tool_register',{role:role,revenue:rev});$('gate').hidden=true;
     }).catch(function(){
       err.textContent='送信できませんでした。通信の状態を確かめて、もう一度押してください。';ev('tool_register_error');
-    }).finally(function(){btn.disabled=false;btn.textContent='登録して使う'});
+    }).finally(function(){btn.disabled=false;btn.textContent='無料のうちに登録して使う'});
   });
 })();
 </script>
