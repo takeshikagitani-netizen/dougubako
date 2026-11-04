@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>毎日の資金確認4項目シート｜社長の道具箱 009</title>
+<meta name="description" content="残高・入金予定・支払予定・返済の4項目を1日1行で入れると、14日先までの残高の見込みが出ます。足りなくなる日は赤く出ます。登録すると、公開から7日間は無料で使えます。">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7MNCBVRLHG"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-7MNCBVRLHG');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700;900&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 道具箱シリーズ共通。上に番号と名前、中央に入力できる表、右上に結論（足りなくなる週）、下に解説と相談への導線 */
+:root{
+  color-scheme:light;
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#152033; --muted:#5d6878; --line:#dde2ea;
+  --navy:#1d3557; --navy-bg:#e8eef7; --danger:#c0392b; --danger-bg:#fdecea; --ok:#1f7a4d; --ok-bg:#e3f4ea; --input:#fbfcfe;
+  --f-d:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-b:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f141c;--surface:#171e29;--ink:#e6ebf2;--muted:#9aa5b5;--line:#2a3443;--navy:#9cbbe6;--navy-bg:#1c2a40;--danger:#f08a7e;--danger-bg:#3b1f1c;--ok:#74d3a2;--ok-bg:#163327;--input:#121924}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f141c;--surface:#171e29;--ink:#e6ebf2;--muted:#9aa5b5;--line:#2a3443;--navy:#9cbbe6;--navy-bg:#1c2a40;--danger:#f08a7e;--danger-bg:#3b1f1c;--ok:#74d3a2;--ok-bg:#163327;--input:#121924}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-b);font-size:15px;line-height:1.7;padding-inline:16px;padding-block:24px 56px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:20px}
+.wrap>*{min-width:0}
+.series{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.series b{font-family:var(--f-m);color:var(--navy);background:var(--navy-bg);border-radius:4px;padding:1px 8px}
+h1{font-family:var(--f-d);font-weight:900;font-size:clamp(24px,4vw,32px);line-height:1.35;margin:4px 0 4px;text-wrap:balance}
+h2{font-family:var(--f-d);font-size:18px;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:68ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+label.f{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+input,select{font:500 15px var(--f-b);color:var(--ink);background:var(--input);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+input.num{font-family:var(--f-m);text-align:right;font-variant-numeric:tabular-nums}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.verdict{border-radius:10px;padding:16px 20px;display:grid;gap:4px}
+.verdict.bad{background:var(--danger-bg)} .verdict.good{background:var(--ok-bg)}
+.verdict b{font-family:var(--f-d);font-size:19px}
+.verdict.bad b{color:var(--danger)} .verdict.good b{color:var(--ok)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{font-size:12px;font-weight:500;color:var(--muted);text-align:right;padding:6px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:4px 6px;border-bottom:1px solid var(--line)}
+td.wk{white-space:nowrap;font-size:13.5px}
+td.bal{font-family:var(--f-m);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
+tr.low td{background:var(--danger-bg)} tr.low td.bal{color:var(--danger)}
+td input.num{padding:6px 8px;min-width:96px}
+.bar{display:flex;gap:10px;flex-wrap:wrap}
+button{font:700 14px var(--f-b);border-radius:6px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.primary{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+.example{font-size:12px;color:var(--muted)}
+.how{display:grid;gap:10px}
+.how ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.next{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.next a{display:grid;gap:4px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.next a span{font-size:13px;color:var(--muted)}
+.next a b{font-family:var(--f-d);font-size:16px;color:var(--navy)}
+footer{font-size:12px;color:var(--muted);display:grid;gap:4px}
+footer a{color:var(--muted)}
+/* 002以降で足した部品 */
+h2.sub{font-size:16px;margin:0 0 10px}
+table.flow{min-width:0}
+tr.total td{font-weight:700;border-top:2px solid var(--line)}
+td.neg{color:var(--danger);background:var(--danger-bg)}
+td.lbl{font-size:13.5px;min-width:120px}
+label.mini{display:grid;gap:2px;font-size:12px;color:var(--muted)}
+small.note{display:block;font-size:11.5px;color:var(--muted);font-family:var(--f-b);font-weight:400}
+td input.txt{min-width:110px}
+.settings.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:700px){.settings.two{grid-template-columns:1fr}}
+table.chk{min-width:520px}
+table.chk th:not(:first-child){text-align:center}
+td.c{text-align:center;width:96px}
+td.c input{width:auto}
+tr.miss td.lbl{background:var(--danger-bg)}
+tr.na td.lbl{color:var(--muted)}
+#list{display:grid;gap:18px}
+/* 登録 */
+.gate{position:fixed;inset:0;background:rgba(10,16,26,.55);display:grid;place-items:center;padding:16px;z-index:10}
+.gate[hidden],.gate .box[hidden]{display:none}
+.deadline{margin-top:10px;background:var(--danger-bg);color:var(--ink);border:1px solid var(--danger);border-radius:8px;padding:10px 14px;font-size:14px;max-width:68ch}
+.deadline:empty{display:none}
+.deadline b{display:block;color:var(--danger);font-size:16px}
+a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;border-radius:8px;padding:12px 16px;background:var(--navy);color:var(--surface)}
+.gate .box{background:var(--surface);color:var(--ink);border-radius:12px;max-width:460px;width:100%;padding:24px;display:grid;gap:14px;max-height:100%;overflow:auto}
+.gate h2{font-size:20px}
+.gate .err{color:var(--danger);font-size:13px;min-height:1em}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+.check input{width:auto;margin-top:4px}
+@media (max-width:700px){.settings,.next{grid-template-columns:1fr}.card{padding:16px}}
+@media print{.gate,.bar,.next,footer,.how,.deadline{display:none!important}body{background:#fff}tr.miss td.lbl{font-weight:700}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="series"><b>009</b><span>社長の道具箱 100日</span></div>
+    <h1>毎日の資金確認4項目シート</h1>
+    <p class="lead">残高・入金予定・支払予定・返済の4項目を1日1行で入れると、14日先までの残高の見込みが出ます。残したい額を下回る日は赤く出ます。入れた数字はこのブラウザの中にだけ保存され、外には送られません。</p>
+    <p class="deadline" id="deadline"></p>
+  </header>
+
+  <section class="card settings" aria-label="最初に入れる数字">
+    <label class="f" for="start">開始する日<input id="start" type="date"></label>
+    <label class="f" for="open">開始する日の朝の残高（円）<input class="num" id="open" inputmode="numeric"></label>
+    <label class="f" for="min">最低限残したい額（円）<input class="num" id="min" inputmode="numeric"></label>
+  </section>
+
+  <div class="verdict" id="verdict" role="status" aria-live="polite"><b></b><p></p></div>
+
+  <section class="card" aria-label="毎日の表">
+    <div class="tbl">
+      <table>
+        <thead><tr><th>日付</th><th>入金予定</th><th>支払予定</th><th>借入返済</th><th>実際の残高</th><th>その日の終わりの見込み</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="example" id="exampleNote">最初に入っている数字は例です。「数字を全部消す」を押してから、ご自身の数字を入れてください。</p>
+  </section>
+
+  <div class="bar">
+    <button type="button" class="primary" id="printBtn">印刷・PDFにする</button>
+    <button type="button" id="clearBtn">数字を全部消す</button>
+    <button type="button" id="exampleBtn">例の数字に戻す</button>
+    <button type="button" id="backupBtn">データをファイルに保存</button>
+    <button type="button" id="restoreBtn">保存したファイルを読み込む</button>
+    <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+  </div>
+  <p class="example">入れた数字はこのパソコンのブラウザに残ります。別のパソコンで使うときや、ブラウザの履歴を消す前は「データをファイルに保存」で控えを取っておけます。</p>
+
+  <section class="card how" aria-labelledby="how-h">
+    <h2 id="how-h">使い方のコツ</h2>
+    <ul>
+      <li>毎朝の確認は、銀行の残高を見て「実際の残高」に入れるだけです。その日より先の見込みは、実際の残高から計算し直します。</li>
+      <li>入金は、実際に口座に入る日に入れます。いつも遅れて入る取引先は、遅めの日に入れておきます。</li>
+      <li>税金、社会保険料、給与、家賃など、日が決まっている支払いを先に入れます。</li>
+      <li>赤い日が出たら、その日の前に、入金を早める相談か、支払いをずらす相談をします。3か月先まで週ごとに見るときは、アプリ001（第1巻）を使います。</li>
+    </ul>
+    <p class="example">この表は確認の目安です。実際の入金日や支払日は、取引先との約束と通帳で確かめてください。</p>
+  </section>
+
+  <nav class="next" aria-label="関連">
+    <a id="noteLink" href="https://note.com/kagitani"><span>このアプリの解説記事（note）</span><b>記事を読む</b></a>
+    <a id="consultLink" href="https://takeshikagitani-netizen.github.io/kagitani-consulting/?utm_source=dougubako&amp;utm_medium=tool&amp;utm_campaign=009"><span>毎日のお金の確認を、社長の手を離れる形にしたい方へ</span><b>初回30分の枠を用意しています</b></a>
+  </nav>
+
+  <footer>
+    <div>社長の道具箱 100日｜鍵谷健（ビーレジェンド創業者・経営コンサルタント）</div>
+    <div><a href="../privacy.html">プライバシーポリシー</a></div>
+  </footer>
+</div>
+
+<div class="gate" id="gate" hidden>
+  <div class="box" id="regMain">
+    <h2>はじめに1回だけ登録してください</h2>
+    <p class="lead freeMsg"></p>
+    <p class="example">毎日1本公開する新しいアプリも、メールでお知らせします。</p>
+    <a class="primary" id="expaBtn" href="https://ex-tri-f1.com/fm/32705/OoJF4yOH">無料のうちに登録して使う（1分）</a>
+    <p class="example">登録が終わると、このアプリに戻って使えます。</p>
+    <p class="example"><a href="#" id="altBtn">フォームが開かないときは、こちらから登録できます</a></p>
+    <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
+  </div>
+  <div class="box" id="paidBox" hidden>
+    <h2>このアプリは「社長の道具箱 第2巻」に収録しました</h2>
+    <p class="lead" id="paidMsg"></p>
+    <a class="primary" id="magBtn" href="https://note.com/kagitani/magazines">第2巻（2,500円）をnoteで見る</a>
+    <form id="volForm" novalidate>
+      <label class="f" for="volPw">第2巻をお買い上げの方は、合言葉を入れてください<input id="volPw" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="err" id="volErr"></p>
+      <button type="submit" class="primary">合言葉で開く</button>
+      <p class="example">合言葉は、第2巻の中の記事「第2巻の使い方と合言葉」に書いてあります。1回入れると、このブラウザでは7本とも開きます。</p>
+    </form>
+    <p class="example">無料期間中に登録して使い始めた方は、そのときと同じブラウザで開くと、そのままお使いいただけます。</p>
+    <p class="example">新しいアプリは毎日お昼12時に公開しています。公開から7日間は無料です。</p>
+  </div>
+  <form class="box" id="regForm" novalidate hidden>
+    <h2>はじめに1回だけ登録してください</h2>
+    <p class="lead freeMsg"></p>
+    <label class="f" for="email">メールアドレス<input type="email" id="email" name="email" autocomplete="email" required></label>
+    <label class="f" for="role">お立場
+      <select id="role" name="role" required>
+        <option value="">選んでください</option><option>経営者</option><option>個人事業主</option><option>会社員</option><option>その他</option>
+      </select>
+    </label>
+    <label class="f" for="revenue">会社の年商
+      <select id="revenue" name="revenue" required>
+        <option value="">選んでください</option><option>3,000万円未満</option><option>3,000万〜1億円</option><option>1億〜3億円</option><option>3億〜10億円</option><option>10億円以上</option><option>答えない</option>
+      </select>
+    </label>
+    <label class="check" for="consent"><input type="checkbox" id="consent" name="consent" required><span>鍵谷健からのメール（新しいアプリのお知らせ・仕事の話）を受け取ることに同意します。いつでも配信を止められます。</span></label>
+    <p class="err" id="regErr"></p>
+    <button type="submit" class="primary" id="regBtn">無料のうちに登録して使う</button>
+    <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
+  </form>
+</div>
+
+<script>
+(function(){
+  var TOOL='009', REG_KEY='dougubako_registered', DATA_KEY='dougubako_009_v1';
+  var FORM='https://formspree.io/f/mykbblvr';
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+  function ev(name,p){try{gtag('event',name,Object.assign({tool:TOOL},p||{}))}catch(e){}}
+  var $=function(id){return document.getElementById(id)};
+  var yen=function(n){return (n<0?'-':'')+'¥'+Math.abs(Math.round(n)).toLocaleString('ja-JP')};
+  var sgn=function(n){return (Math.round(n)>0?'+':'')+yen(n)};
+  var toNum=function(s){var n=parseInt(String(s||'').replace(/[^\d-]/g,''),10);return isNaN(n)?0:n};
+  var toDec=function(s){var n=parseFloat(String(s==null?'':s).replace(/[^\d.\-]/g,''));return isNaN(n)?0:n};
+  var fmtIn=function(n){return n?Number(n).toLocaleString('ja-JP'):''};
+  var fix1=function(n){return (Math.round(n*10)/10).toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})};
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  function verdict(good,b,p){var v=$('verdict');v.className='verdict '+(good?'good':'bad');v.querySelector('b').textContent=b;v.querySelector('p').textContent=p||''}
+
+  var FILE='毎日の資金確認4項目シート';
+  var FIELDS={start:'txt',open:'int',min:'int'};
+  var DAYS=14, WD='日月火水木金土';
+  function today(){var j=new Date(Date.now()+9*3600000);return j.toISOString().slice(0,10)}
+  function blank(){var r=[];for(var i=0;i<DAYS;i++)r.push({inc:0,out:0,loan:0,act:null});return r}
+  function example(){var r=blank();r[1].inc=800000;r[2].out=450000;r[4].out=300000;r[6].out=1200000;r[7].loan=350000;r[9].inc=600000;r[11].out=900000;
+    return {start:today(),open:2500000,min:1000000,rows:r,example:true}}
+  function valid(s){return !!(s&&typeof s.open==='number'&&s.rows&&s.rows.length===DAYS)}
+  function dayOf(i){var d=new Date((state.start||today())+'T00:00:00+09:00');d=new Date(d.getTime()+i*86400000+9*3600000);return d}
+  function lab(i){var d=dayOf(i);return (d.getUTCMonth()+1)+'/'+d.getUTCDate()+'（'+WD[d.getUTCDay()]+'）'}
+  function render(){
+    $('rows').innerHTML=state.rows.map(function(r,i){
+      var c=function(k){return '<td><input class="num" inputmode="numeric" data-k="'+k+'" data-r="'+i+'" aria-label="'+k+'" value="'+(r[k]?Number(r[k]).toLocaleString('ja-JP'):'')+'"></td>'};
+      var act=r.act===null?'':Number(r.act).toLocaleString('ja-JP');
+      return '<tr id="d'+i+'"><td class="wk" id="w'+i+'"></td>'+c('inc')+c('out')+c('loan')+
+        '<td><input class="num" inputmode="numeric" data-k="act" data-r="'+i+'" aria-label="実際の残高" value="'+act+'"></td><td class="bal" id="b'+i+'"></td></tr>'
+    }).join('');
+  }
+  function onRow(t){
+    var k=t.getAttribute&&t.getAttribute('data-k');if(!k)return false;
+    var r=state.rows[+t.getAttribute('data-r')];
+    if(k==='act'){r.act=String(t.value).trim()===''?null:toNum(t.value)}else{r[k]=toNum(t.value)}
+    return true;
+  }
+  function clearAll(){state.open=0;state.min=0;state.rows=blank()}
+  function calc(){
+    var bal=state.open, first=-1, low=null, lowI=0;
+    state.rows.forEach(function(r,i){
+      bal=r.act!==null?r.act:bal+r.inc-r.out-r.loan;
+      $('w'+i).textContent=lab(i);$('b'+i).textContent=yen(bal);
+      var isLow=bal<state.min;$('d'+i).className=isLow?'low':'';
+      if(isLow&&first<0)first=i;
+      if(low===null||bal<low){low=bal;lowI=i}
+    });
+    if(!state.open&&!state.rows.some(function(r){return r.inc||r.out||r.loan||r.act!==null})){verdict(true,'朝の残高と、入金・支払の予定を入れると、見込みが出ます','');return}
+    if(first<0){verdict(true,'14日の間、残高は'+yen(state.min)+'を下回りません','一番少なくなるのは'+lab(lowI)+'の'+yen(low)+'です。');return}
+    var fb=$('b'+first).textContent;
+    verdict(false,lab(first)+'に、残高が'+yen(state.min)+'を下回ります','その日の見込みは'+fb+'です。一番少なくなるのは'+lab(lowI)+'の'+yen(low)+'で、あと'+yen(state.min-low)+'足りません。');
+  }
+
+  var state; try{state=JSON.parse(store(DATA_KEY)||'null')}catch(e){state=null}
+  if(!valid(state)){state=example()}
+
+  function save(){store(DATA_KEY,JSON.stringify(state))}
+  function fill(){Object.keys(FIELDS).forEach(function(k){var el=$(k);if(!el)return;var t=FIELDS[k];
+    el.value=t==='int'?fmtIn(state[k]):(t==='dec'?(state[k]?String(state[k]):''):(state[k]==null?'':state[k]))})}
+  function build(){fill();render();$('exampleNote').hidden=!state.example;calc()}
+  var used=false;
+  function touched(){state.example=false;$('exampleNote').hidden=true;save();calc();if(!used){used=true;ev('tool_use')}}
+  document.addEventListener('input',function(e){
+    var t=e.target;if(!t.id&&!t.getAttribute('data-k'))return;
+    if(FIELDS[t.id]){var k=FIELDS[t.id];state[t.id]=k==='int'?toNum(t.value):(k==='dec'?toDec(t.value):t.value);touched();return}
+    if(onRow(t))touched();
+  });
+  document.addEventListener('blur',function(e){var t=e.target;if(t.classList&&t.classList.contains('num')){
+    if(FIELDS[t.id]==='dec'){var d=toDec(t.value);t.value=d?String(d):''}else{t.value=fmtIn(toNum(t.value))}}},true);
+  $('printBtn').onclick=function(){ev('tool_print');window.print()};
+  $('clearBtn').onclick=function(){clearAll();state.example=false;save();build()};
+  $('exampleBtn').onclick=function(){state=example();save();build()};
+  $('backupBtn').onclick=function(){
+    var blob=new Blob([JSON.stringify({tool:TOOL,saved:new Date().toISOString(),data:state},null,1)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=new Date().toISOString().slice(0,10).replace(/-/g,'')+'_道具箱'+TOOL+'_'+FILE+'.json';a.click();ev('tool_backup');
+  };
+  $('restoreBtn').onclick=function(){$('restoreFile').click()};
+  $('restoreFile').onchange=function(e){
+    var f=e.target.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){try{var j=JSON.parse(r.result);if(j.tool!==TOOL||!valid(j.data))throw 0;state=j.data;save();build();ev('tool_restore')}
+      catch(x){alert('このアプリの保存ファイルではないため、読み込めませんでした。')}};
+    r.readAsText(f);e.target.value='';
+  };
+  $('consultLink').onclick=function(){ev('consult_click')};
+  $('noteLink').onclick=function(){ev('note_click')};
+  build();
+
+  // 登録（1回だけ。?preview=1 のときは出さない）
+  var preview=/[?&]preview=1/.test(location.search);
+  // 無料期間：公開日から7日間。期間中に登録して使い始めた人は、そのあとも無料（このアプリごとに記録）。
+  // 8日目からの新しい人には、有料マガジン（巻）の案内を出す。?now=YYYY-MM-DD は動作確認用。
+  var FREE_FROM='2026-11-09', FREE_DAYS=7, VOLUME='第2巻', PRICE='2,500円', CLAIM_KEY='dougubako_claim_'+TOOL;
+  var DOW='日月火水木金土';
+  var nowQ=location.search.match(/[?&]now=(\d{4}-\d{2}-\d{2})/);
+  var now=nowQ?new Date(nowQ[1]+'T12:00:00+09:00'):new Date();
+  var freeStart=new Date(FREE_FROM+'T00:00:00+09:00');
+  var freeEnd=new Date(freeStart.getTime()+FREE_DAYS*86400000); // この時刻から有料
+  var lastFree=new Date(freeEnd.getTime()-86400000);
+  var jp=function(d){var j=new Date(d.getTime()+9*3600000);return (j.getUTCMonth()+1)+'月'+j.getUTCDate()+'日（'+DOW[j.getUTCDay()]+'）'};
+  var inFree=now<freeEnd;
+  // 第2巻を買った人は合言葉で開く（巻ごとの固定の合言葉。ハッシュで照合し、1回入れたらブラウザに記録）
+  var VOL_KEY='dougubako_vol2', VOL_HASH='2d70ae8bdb19e174cda862418c21504bb0adc2c2bcb3cd1e48f96698837a722c';
+  var owned=function(){return store(VOL_KEY)==='1'};
+  var claimed=function(){return store(CLAIM_KEY)==='1'||owned()};
+  var claim=function(){store(CLAIM_KEY,'1')};
+  if(inFree&&store(REG_KEY)==='1'&&!claimed()){claim()}
+  var dl=$('deadline');
+  if(inFree){
+    var left=Math.max(1,Math.ceil((freeEnd-Math.max(now,freeStart))/86400000));
+    dl.innerHTML='<b>無料で使えるのは '+jp(lastFree)+' まで（あと'+left+'日）</b>期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  }else if(claimed()){
+    dl.innerHTML=owned()?'<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>':'<b>無料期間中に使い始めた方は、このブラウザでそのまま無料でお使いいただけます</b>';
+  }else{
+    dl.innerHTML='<b>このアプリは「社長の道具箱 '+VOLUME+'」に収録しました</b>無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。';
+  }
+  [].forEach.call(document.querySelectorAll('.freeMsg'),function(el){
+    el.textContent='このアプリは'+jp(lastFree)+'まで無料です。期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  });
+  $('paidMsg').textContent='無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。このアプリは、noteの有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'・7本入り）でお使いいただけます。';
+  if(!preview&&!claimed()){
+    $('gate').hidden=false;
+    if(inFree){setTimeout(function(){$('expaBtn').focus()},50)}
+    else{$('regMain').hidden=true;$('paidBox').hidden=false;ev('tool_paid_view')}
+  }
+  $('magBtn').onclick=function(){ev('magazine_click')};
+  $('volForm').addEventListener('submit',function(e){
+    e.preventDefault();var pw=$('volPw').value.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).toLowerCase();
+    if(!pw){$('volErr').textContent='合言葉を入れてください。';return}
+    if(!(window.crypto&&crypto.subtle)){$('volErr').textContent='このブラウザでは確かめられません。別のブラウザでお試しください。';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){
+      var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+      if(h!==VOL_HASH){$('volErr').textContent='合言葉が違います。第2巻の記事の合言葉をそのまま入れてください。';ev('volume_pw_error');return}
+      store(VOL_KEY,'1');ev('volume_unlock',{volume:'2'});$('gate').hidden=true;
+      dl.innerHTML='<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>';
+    });
+  });
+  // 本線はエキスパのフォーム。送信後に registered.html へ移り、そこで登録済みを記録してこのアプリへ戻す
+  $('expaBtn').onclick=function(){store('dougubako_return',location.pathname);ev('tool_register_open',{via:'expa'})};
+  // 予備：エキスパのフォームが開けないときは、この画面の中で Formspree へ送る
+  $('altBtn').onclick=function(e){e.preventDefault();$('regMain').hidden=true;$('regForm').hidden=false;ev('tool_register_open',{via:'formspree'});setTimeout(function(){$('email').focus()},50)};
+  $('regForm').addEventListener('submit',function(e){
+    e.preventDefault();var err=$('regErr');err.textContent='';
+    var email=$('email').value.trim(),role=$('role').value,rev=$('revenue').value,ok=$('consent').checked;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){err.textContent='メールアドレスの形が正しくありません。';return}
+    if(!role||!rev){err.textContent='お立場と年商を選んでください。';return}
+    if(!ok){err.textContent='メールの受け取りに同意すると使えます。';return}
+    var btn=$('regBtn');btn.disabled=true;btn.textContent='送信しています…';
+    var fd=new FormData();fd.append('email',email);fd.append('立場',role);fd.append('年商',rev);
+    fd.append('メルマガ同意','同意する（'+new Date().toLocaleString('ja-JP')+'・社長の道具箱'+TOOL+'）');
+    fd.append('入口','社長の道具箱 '+TOOL);fd.append('_subject','【社長の道具箱 登録】'+TOOL);
+    fetch(FORM,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).then(function(r){
+      if(!r.ok)throw new Error('status '+r.status);
+      store(REG_KEY,'1');claim();ev('tool_register',{role:role,revenue:rev});$('gate').hidden=true;
+    }).catch(function(){
+      err.textContent='送信できませんでした。通信の状態を確かめて、もう一度押してください。';ev('tool_register_error');
+    }).finally(function(){btn.disabled=false;btn.textContent='無料のうちに登録して使う'});
+  });
+})();
+</script>
+</body>
+</html>
