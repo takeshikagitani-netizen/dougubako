@@ -112,8 +112,8 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
   </header>
 
   <section class="card settings" aria-label="最初に入れる数字">
-    <label class="f" for="start">開始する日<input id="start" type="date"></label>
-    <label class="f" for="open">開始する日の朝の残高（円）<input class="num" id="open" inputmode="numeric"></label>
+    <label class="f" for="start">開始日<input id="start" type="date"></label>
+    <label class="f" for="open">今の残高（円）<input class="num" id="open" inputmode="numeric"></label>
     <label class="f" for="min">最低限残したい額（円）<input class="num" id="min" inputmode="numeric"></label>
   </section>
 
@@ -143,6 +143,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     <h2 id="how-h">使い方のコツ</h2>
     <ul>
       <li>毎朝の確認は、銀行の残高を見て「実際の残高」に入れるだけです。その日より先の見込みは、実際の残高から計算し直します。</li>
+      <li>14日がたったら、「数字を全部消す」を押し、開始日と今の残高を入れ直して、次の14日分を入れます。</li>
       <li>入金は、実際に口座に入る日に入れます。いつも遅れて入る取引先は、遅めの日に入れておきます。</li>
       <li>税金、社会保険料、給与、家賃など、日が決まっている支払いを先に入れます。</li>
       <li>赤い日が出たら、その日の前に、入金を早める相談か、支払いをずらす相談をします。3か月先まで週ごとに見るときは、アプリ001（第1巻）を使います。</li>
@@ -255,7 +256,7 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
       if(isLow&&first<0)first=i;
       if(low===null||bal<low){low=bal;lowI=i}
     });
-    if(!state.open&&!state.rows.some(function(r){return r.inc||r.out||r.loan||r.act!==null})){verdict(true,'朝の残高と、入金・支払の予定を入れると、見込みが出ます','');return}
+    if(!state.open&&!state.rows.some(function(r){return r.inc||r.out||r.loan||r.act!==null})){verdict(true,'今の残高と、入金・支払の予定を入れると、見込みが出ます','');return}
     if(first<0){verdict(true,'14日の間、残高は'+yen(state.min)+'を下回りません','一番少なくなるのは'+lab(lowI)+'の'+yen(low)+'です。');return}
     var fb=$('b'+first).textContent;
     verdict(false,lab(first)+'に、残高が'+yen(state.min)+'を下回ります','その日の見込みは'+fb+'です。一番少なくなるのは'+lab(lowI)+'の'+yen(low)+'で、あと'+yen(state.min-low)+'足りません。');
