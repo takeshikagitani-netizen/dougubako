@@ -162,6 +162,11 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
     <p class="example">毎日1本公開する新しいアプリも、メールでお知らせします。</p>
     <a class="primary" id="expaBtn" href="https://ex-tri-f1.com/fm/32705/OoJF4yOH">無料のうちに登録して使う（1分）</a>
     <p class="example">登録が終わると、このアプリに戻って使えます。</p>
+    <form id="memForm" novalidate>
+      <label class="f" for="memPw">登録済みの方は、お知らせメールの合言葉を入れてください<input id="memPw" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="err" id="memErr"></p>
+      <button type="submit">合言葉で開く</button>
+    </form>
     <p class="example"><a href="#" id="altBtn">フォームが開かないときは、こちらから登録できます</a></p>
     <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
   </div>
@@ -338,6 +343,18 @@ a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;b
       if(h!==VOL_HASH){$('volErr').textContent='合言葉が違います。第2巻の記事の合言葉をそのまま入れてください。';ev('volume_pw_error');return}
       store(VOL_KEY,'1');ev('volume_unlock',{volume:'2'});$('gate').hidden=true;
       dl.innerHTML='<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>';
+    });
+  });
+  // 登録済みの人が別のブラウザで開いたときは、お知らせメールの合言葉で開く
+  var MEM_HASH='e9a3239db1f325b17d0d186f5d652331c6978ddf912719cd8d9be0a27f8a86e3';
+  $('memForm').addEventListener('submit',function(e){
+    e.preventDefault();var pw=$('memPw').value.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).toLowerCase();
+    if(!pw){$('memErr').textContent='合言葉を入れてください。';return}
+    if(!(window.crypto&&crypto.subtle)){$('memErr').textContent='このブラウザでは確かめられません。別のブラウザでお試しください。';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){
+      var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+      if(h!==MEM_HASH){$('memErr').textContent='合言葉が違います。お知らせメールの合言葉をそのまま入れてください。';ev('member_pw_error');return}
+      store(REG_KEY,'1');claim();ev('member_unlock');$('gate').hidden=true;
     });
   });
   // 本線はエキスパのフォーム。送信後に registered.html へ移り、そこで登録済みを記録してこのアプリへ戻す
