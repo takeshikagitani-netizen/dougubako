@@ -280,6 +280,7 @@ td.barc{width:34%}
   var FILE='1人しかできない仕事の洗い出し';
   var FIELDS={};
   var ROWS=15;
+  var pct=function(n,t){return t?Math.round(n/t*100):0};
   function row(n,w,c,t,x){return {name:n,who:w,cover:c,times:t,stop:!!x}}
   function blank(){var r=[];for(var i=0;i<ROWS;i++)r.push(row('','',0,0));return r}
   function example(){var r=blank();
