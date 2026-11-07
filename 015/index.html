@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIに任せられるか判定｜社長の道具箱 015</title>
+<meta name="description" content="業務ごとに5つの問いへ印を付けると、「任せられる」「下書きまで」「人が残す」に分かれます。AIに回せる時間と、最初に試す仕事が出ます。登録すると、公開から7日間は無料で使えます。">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7MNCBVRLHG"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+if(/[?&](preview=1|now=)/.test(location.search))window['ga-disable-G-7MNCBVRLHG']=true;
+gtag('js',new Date());gtag('config','G-7MNCBVRLHG');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700;900&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 道具箱シリーズ共通。上に番号と名前、中央に入力できる表、右上に結論（足りなくなる週）、下に解説と相談への導線 */
+:root{
+  color-scheme:light;
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#152033; --muted:#5d6878; --line:#dde2ea;
+  --navy:#1d3557; --navy-bg:#e8eef7; --danger:#c0392b; --danger-bg:#fdecea; --ok:#1f7a4d; --ok-bg:#e3f4ea; --input:#fbfcfe;
+  --f-d:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-b:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f141c;--surface:#171e29;--ink:#e6ebf2;--muted:#9aa5b5;--line:#2a3443;--navy:#9cbbe6;--navy-bg:#1c2a40;--danger:#f08a7e;--danger-bg:#3b1f1c;--ok:#74d3a2;--ok-bg:#163327;--input:#121924}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f141c;--surface:#171e29;--ink:#e6ebf2;--muted:#9aa5b5;--line:#2a3443;--navy:#9cbbe6;--navy-bg:#1c2a40;--danger:#f08a7e;--danger-bg:#3b1f1c;--ok:#74d3a2;--ok-bg:#163327;--input:#121924}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-b);font-size:15px;line-height:1.7;padding-inline:16px;padding-block:24px 56px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:20px}
+.wrap>*{min-width:0}
+.series{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.series b{font-family:var(--f-m);color:var(--navy);background:var(--navy-bg);border-radius:4px;padding:1px 8px}
+h1{font-family:var(--f-d);font-weight:900;font-size:clamp(24px,4vw,32px);line-height:1.35;margin:4px 0 4px;text-wrap:balance}
+h2{font-family:var(--f-d);font-size:18px;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:68ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+label.f{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+input,select{font:500 15px var(--f-b);color:var(--ink);background:var(--input);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+input.num{font-family:var(--f-m);text-align:right;font-variant-numeric:tabular-nums}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.verdict{border-radius:10px;padding:16px 20px;display:grid;gap:4px}
+.verdict.bad{background:var(--danger-bg)} .verdict.good{background:var(--ok-bg)}
+.verdict b{font-family:var(--f-d);font-size:19px}
+.verdict.bad b{color:var(--danger)} .verdict.good b{color:var(--ok)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{font-size:12px;font-weight:500;color:var(--muted);text-align:right;padding:6px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:4px 6px;border-bottom:1px solid var(--line)}
+td.wk{white-space:nowrap;font-size:13.5px}
+td.bal{font-family:var(--f-m);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
+tr.low td{background:var(--danger-bg)} tr.low td.bal{color:var(--danger)}
+td input.num{padding:6px 8px;min-width:96px}
+.bar{display:flex;gap:10px;flex-wrap:wrap}
+button{font:700 14px var(--f-b);border-radius:6px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.primary{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+.example{font-size:12px;color:var(--muted)}
+.how{display:grid;gap:10px}
+.how ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.next{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.next a{display:grid;gap:4px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.next a span{font-size:13px;color:var(--muted)}
+.next a b{font-family:var(--f-d);font-size:16px;color:var(--navy)}
+footer{font-size:12px;color:var(--muted);display:grid;gap:4px}
+footer a{color:var(--muted)}
+/* 002以降で足した部品 */
+h2.sub{font-size:16px;margin:0 0 10px}
+table.flow{min-width:0}
+tr.total td{font-weight:700;border-top:2px solid var(--line)}
+td.neg{color:var(--danger);background:var(--danger-bg)}
+td.lbl{font-size:13.5px;min-width:120px}
+label.mini{display:grid;gap:2px;font-size:12px;color:var(--muted)}
+small.note{display:block;font-size:11.5px;color:var(--muted);font-family:var(--f-b);font-weight:400}
+td input.txt{min-width:110px}
+.settings.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:700px){.settings.two{grid-template-columns:1fr}}
+table.chk{min-width:520px}
+table.chk th:not(:first-child){text-align:center}
+td.c{text-align:center;width:96px}
+td.c input{width:auto}
+tr.miss td.lbl{background:var(--danger-bg)}
+tr.na td.lbl{color:var(--muted)}
+#list{display:grid;gap:18px}
+/* 登録 */
+.gate{position:fixed;inset:0;background:rgba(10,16,26,.55);display:grid;place-items:center;padding:16px;z-index:10}
+.gate[hidden],.gate .box[hidden]{display:none}
+.deadline{margin-top:10px;background:var(--danger-bg);color:var(--ink);border:1px solid var(--danger);border-radius:8px;padding:10px 14px;font-size:14px;max-width:68ch}
+.deadline:empty{display:none}
+.deadline b{display:block;color:var(--danger);font-size:16px}
+a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;border-radius:8px;padding:12px 16px;background:var(--navy);color:var(--surface)}
+.gate .box{background:var(--surface);color:var(--ink);border-radius:12px;max-width:460px;width:100%;padding:24px;display:grid;gap:14px;max-height:100%;overflow:auto}
+.gate h2{font-size:20px}
+.gate .err{color:var(--danger);font-size:13px;min-height:1em}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+.check input{width:auto;margin-top:4px}
+/* 015 AI判定 */
+.mok{background:var(--ok-bg)!important;color:var(--ok)!important}
+.barw i.mok{background:var(--ok)!important}
+table.sort{min-width:1060px}
+table.sort th{white-space:normal;text-align:center;vertical-align:bottom;line-height:1.35}
+table.sort th:first-child{text-align:left;min-width:210px}
+table.sort td input.num{min-width:58px;width:64px}
+table.sort td.c{width:74px}
+td.kind{text-align:center;white-space:nowrap}
+td.kind b{display:inline-block;border-radius:4px;padding:0 8px;font-size:12.5px}
+#orderList:empty{display:none}
+#orderList{margin:8px 0 0;padding-left:1.4em;font-size:14px}
+/* 011 時間家計簿 */
+:root{--amber:#8a5a00;--amber-bg:#fdf0d5;--gray-bg:#e9ecf1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--amber:#f0c26e;--amber-bg:#3a2d12;--gray-bg:#262f3c}}
+:root[data-theme="dark"]{--amber:#f0c26e;--amber-bg:#3a2d12;--gray-bg:#262f3c}
+.palette{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.palette span{font-size:13px;color:var(--muted)}
+.palette button{padding:7px 12px}
+.palette button[aria-pressed="true"]{outline:2px solid var(--navy);outline-offset:1px}
+.m1{background:var(--navy-bg)!important;color:var(--navy)!important}
+.m2{background:var(--danger-bg)!important;color:var(--danger)!important}
+.m3{background:var(--amber-bg)!important;color:var(--amber)!important}
+.m4{background:var(--gray-bg)!important;color:var(--muted)!important}
+table.grid{min-width:600px;table-layout:fixed}
+table.grid th{text-align:center;padding:4px 2px;font-size:11.5px}
+table.grid th:first-child,table.grid td.tm{width:58px;position:sticky;left:0;background:var(--surface);text-align:left}
+table.grid td{padding:1px 2px;border-bottom:0}
+table.grid td.tm{font-family:var(--f-m);font-size:12px;white-space:nowrap}
+table.grid td.tm.hot{color:var(--danger);font-weight:700}
+table.grid td.cnt{font-family:var(--f-m);font-size:12px;text-align:center;color:var(--muted)}
+button.cell{display:block;width:100%;height:26px;padding:0;font:700 12px var(--f-b);border-radius:4px;border:1px solid var(--line);background:var(--input);color:var(--muted)}
+table.sum{min-width:480px}
+table.sum td.lbl b{display:inline-block;border-radius:4px;padding:0 8px;font-size:13px}
+td.barc{width:34%}
+.barw{height:12px;background:var(--bg);border-radius:3px;overflow:hidden}
+.barw i{display:block;height:100%}
+.barw i.m1{background:var(--navy)!important}.barw i.m2{background:var(--danger)!important}.barw i.m3{background:var(--amber)!important}.barw i.m4{background:var(--muted)!important}
+#bandNote:empty,#earlyNote:empty{display:none}
+#bandNote,#earlyNote{font-size:14px;margin-top:8px}
+@media (max-width:700px){.settings,.next{grid-template-columns:1fr}.card{padding:16px}}
+@media print{.palette,.gate,.bar,.next,footer,.how,.deadline{display:none!important}body{background:#fff}.m1,.m2,.m3,.m4,.mok,button.cell{-webkit-print-color-adjust:exact;print-color-adjust:exact}table.grid th:first-child,table.grid td.tm{position:static}tr.miss td.lbl{font-weight:700}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="series"><b>015</b><span>社長の道具箱 100日</span></div>
+    <h1>AIに任せられるか判定</h1>
+    <p class="lead">業務ごとに5つの問いへ印を付けると、「任せられる」「下書きまで」「人が残す」に分かれます。AIに回せる時間と、最初に試す仕事が出ます。入れた内容はこのブラウザの中にだけ保存され、外には送られません。</p>
+    <p class="deadline" id="deadline"></p>
+  </header>
+
+  <div class="verdict" id="verdict" role="status" aria-live="polite"><b></b><p></p></div>
+
+  <section class="card" aria-label="判定の合計">
+    <h2 class="sub">判定の合計</h2>
+    <div class="tbl">
+      <table class="sum">
+        <thead><tr><th>判定</th><th>件数</th><th>1か月の時間</th><th>割合</th><th></th></tr></thead>
+        <tbody id="sumRows"></tbody>
+      </table>
+    </div>
+    <div id="orderBox" hidden>
+      <h2 class="sub" style="margin-top:14px">試す順番（「任せられる」を時間の多い順に、続けて「下書きまで」を時間の多い順に）</h2>
+      <ol id="orderList"></ol>
+    </div>
+  </section>
+
+  <section class="card" aria-label="判定の表">
+    <h2 class="sub">業務の表</h2>
+    <div class="tbl">
+      <table class="sort">
+        <thead><tr><th>業務の名前</th><th>1か月の回数</th><th>1回の分数</th><th>材料を文字か数字で渡せる</th><th>個人情報・社外秘を入れずに進められる</th><th>できたものを人が確かめられる</th><th>良い出来の見本か基準がある</th><th>間違えても後から直せる</th><th>1か月の時間</th><th>判定</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="example">はじめの3問（材料・情報・確かめる）のどれかに印がなければ「人が残す」です。3問とも印があり、あとの2問（見本・直せる）のどれかに印がなければ「下書きまで」です。5問すべてに印があれば「任せられる」です。印がない問いは「いいえ」として数えます。</p>
+    <p class="example">「任せられる」は、AIに作らせて、人が確かめて使う仕事です。「下書きまで」は、AIの下書きに人が手を入れて、人が出す仕事です。「人が残す」は、人がやる仕事です。</p>
+    <p class="example" id="exampleNote">最初に入っている内容は例です。「内容を全部消す」を押してから、ご自身の内容を入れてください。</p>
+  </section>
+
+  <div class="bar">
+    <button type="button" class="primary" id="printBtn">印刷・PDFにする</button>
+    <button type="button" id="clearBtn">内容を全部消す</button>
+    <button type="button" id="exampleBtn">例に戻す</button>
+    <button type="button" id="backupBtn">データをファイルに保存</button>
+    <button type="button" id="restoreBtn">保存したファイルを読み込む</button>
+    <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+  </div>
+  <p class="example">入れた内容はこのパソコンのブラウザに残ります。別のパソコンで使うときや、ブラウザの履歴を消す前は「データをファイルに保存」で控えを取っておけます。</p>
+
+  <section class="card how" aria-labelledby="how-h">
+    <h2 id="how-h">使い方のコツ</h2>
+    <ul>
+      <li>難しい仕事かどうかでは判定しません。渡せるか、確かめられるか、直せるかで判定します。</li>
+      <li>「材料を文字か数字で渡せる」は、社長の頭の中にしかない話でも、話して文字にできれば印を付けます。</li>
+      <li>「できたものを人が確かめられる」は、その仕事が分かる人が、短い時間で正しいか判断できるなら印を付けます。確かめられる人がいない仕事は、任せません。</li>
+      <li>「間違えても後から直せる」は、送った後・出した後に取り消せない仕事には印を付けません。</li>
+      <li>試す順番の上から1件だけ、今週AIにやらせて、出てきたものを人が確かめます。</li>
+    </ul>
+    <p class="example">時間は「1か月の回数×1回の分数」で計算しています。AIに回しても、確かめる時間は残ります。この時間がそのまま空くわけではありません。</p>
+  </section>
+
+  <nav class="next" aria-label="関連">
+    <a id="noteLink" href="https://note.com/kagitani"><span>このアプリの解説記事（note）</span><b>記事を読む</b></a>
+    <a id="consultLink" href="https://takeshikagitani-netizen.github.io/kagitani-consulting/?utm_source=dougubako&amp;utm_medium=tool&amp;utm_campaign=015"><span>AIをどの仕事に使うかを、会社に合わせて決めたい方へ</span><b>初回30分の枠を用意しています</b></a>
+  </nav>
+
+  <footer>
+    <div>社長の道具箱 100日｜鍵谷健（ビーレジェンド創業者・経営コンサルタント）</div>
+    <div><a href="../privacy.html">プライバシーポリシー</a></div>
+  </footer>
+</div>
+
+<div class="gate" id="gate" hidden>
+  <div class="box" id="regMain">
+    <h2>はじめに1回だけ登録してください</h2>
+    <p class="lead freeMsg"></p>
+    <p class="example">毎日1本公開する新しいアプリも、メールでお知らせします。</p>
+    <a class="primary" id="expaBtn" href="https://ex-tri-f1.com/fm/32705/OoJF4yOH">無料のうちに登録して使う（1分）</a>
+    <p class="example">登録が終わると、このアプリに戻って使えます。</p>
+    <form id="memForm" novalidate>
+      <label class="f" for="memPw">登録済みの方は、お知らせメールの合言葉を入れてください<input id="memPw" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="err" id="memErr"></p>
+      <button type="submit">合言葉で開く</button>
+    </form>
+    <p class="example"><a href="#" id="altBtn">フォームが開かないときは、こちらから登録できます</a></p>
+    <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
+  </div>
+  <div class="box" id="paidBox" hidden>
+    <h2>このアプリは「社長の道具箱 第3巻」に収録しました</h2>
+    <p class="lead" id="paidMsg"></p>
+    <a class="primary" id="magBtn" href="https://note.com/kagitani/magazines">第3巻（2,500円）をnoteで見る</a>
+    <form id="volForm" novalidate>
+      <label class="f" for="volPw">第3巻をお買い上げの方は、合言葉を入れてください<input id="volPw" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="err" id="volErr"></p>
+      <button type="submit" class="primary">合言葉で開く</button>
+      <p class="example">合言葉は、第3巻の中の記事「第3巻の使い方と合言葉」に書いてあります。1回入れると、このブラウザでは7本とも開きます。</p>
+    </form>
+    <p class="example">無料期間中に登録して使い始めた方は、そのときと同じブラウザで開くと、そのままお使いいただけます。</p>
+    <p class="example">新しいアプリは毎日お昼12時に公開しています。公開から7日間は無料です。</p>
+  </div>
+  <form class="box" id="regForm" novalidate hidden>
+    <h2>はじめに1回だけ登録してください</h2>
+    <p class="lead freeMsg"></p>
+    <label class="f" for="email">メールアドレス<input type="email" id="email" name="email" autocomplete="email" required></label>
+    <label class="f" for="role">お立場
+      <select id="role" name="role" required>
+        <option value="">選んでください</option><option>経営者</option><option>個人事業主</option><option>会社員</option><option>その他</option>
+      </select>
+    </label>
+    <label class="f" for="revenue">会社の年商
+      <select id="revenue" name="revenue" required>
+        <option value="">選んでください</option><option>3,000万円未満</option><option>3,000万〜1億円</option><option>1億〜3億円</option><option>3億〜10億円</option><option>10億円以上</option><option>答えない</option>
+      </select>
+    </label>
+    <label class="check" for="consent"><input type="checkbox" id="consent" name="consent" required><span>鍵谷健からのメール（新しいアプリのお知らせ・仕事の話）を受け取ることに同意します。いつでも配信を止められます。</span></label>
+    <p class="err" id="regErr"></p>
+    <button type="submit" class="primary" id="regBtn">無料のうちに登録して使う</button>
+    <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
+  </form>
+</div>
+
+<script>
+(function(){
+  var TOOL='015', REG_KEY='dougubako_registered', DATA_KEY='dougubako_015_v1';
+  var FORM='https://formspree.io/f/mykbblvr';
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+  function ev(name,p){try{gtag('event',name,Object.assign({tool:TOOL},p||{}))}catch(e){}}
+  var $=function(id){return document.getElementById(id)};
+  var yen=function(n){return (n<0?'-':'')+'¥'+Math.abs(Math.round(n)).toLocaleString('ja-JP')};
+  var sgn=function(n){return (Math.round(n)>0?'+':'')+yen(n)};
+  var toNum=function(s){var n=parseInt(String(s||'').replace(/[^\d-]/g,''),10);return isNaN(n)?0:n};
+  var toDec=function(s){var n=parseFloat(String(s==null?'':s).replace(/[^\d.\-]/g,''));return isNaN(n)?0:n};
+  var fmtIn=function(n){return n?Number(n).toLocaleString('ja-JP'):''};
+  var fix1=function(n){return (Math.round(n*10)/10).toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})};
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  function verdict(good,b,p){var v=$('verdict');v.className='verdict '+(good?'good':'bad');v.querySelector('b').textContent=b;v.querySelector('p').textContent=p||''}
+
+  var FILE='AIに任せられるか判定';
+  var FIELDS={};
+  var ROWS=12, KIND=['任せられる','下書きまで','人が残す'], KC=['mok','m3','m1'];
+  var Q=[['src','材料を文字か数字で渡せる'],['safe','個人情報・社外秘を入れずに進められる'],['check','できたものを人が確かめられる'],['model','良い出来の見本か基準がある'],['fix','間違えても後から直せる']];
+  var hm=function(m){m=Math.round(m);var h=Math.floor(m/60);m=m%60;return h?(h+'時間'+(m?m+'分':'')):m+'分'};
+  var pct=function(n,t){return t?Math.round(n/t*100):0};
+  function row(n,t,m,q){q=q||'00000';return {name:n,times:t,mins:m,src:q[0]==='1',safe:q[1]==='1',check:q[2]==='1',model:q[3]==='1',fix:q[4]==='1'}}
+  function blank(){var r=[];for(var i=0;i<ROWS;i++)r.push(row('',0,0));return r}
+  function example(){var r=blank();
+    [row('商品説明文を書く',10,30,'11111'),row('社内会議のメモを議事録に整える',4,40,'11111'),row('求人票の文章を書く',2,60,'11111'),
+     row('よくある問い合わせの返信文',40,5,'11110'),row('提案書を作る',3,120,'11110'),row('お詫びの文面を書く',3,30,'11100'),
+     row('給与計算',1,180,'10110'),row('クレームの電話対応',5,20,'01000'),row('大口の見積もりの金額を決める',6,60,'01010'),row('採用するかどうかを決める',2,30,'10000')].forEach(function(x,i){r[i]=x});
+    return {rows:r,example:true}}
+  function valid(s){return !!(s&&s.rows&&s.rows.length===ROWS)}
+  function kind(r){return !(r.src&&r.safe&&r.check)?2:(r.model&&r.fix?0:1)}
+  function render(){
+    $('rows').innerHTML=state.rows.map(function(r,i){
+      var n=function(k,l){return '<td><input class="num" inputmode="numeric" data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'" value="'+(r[k]?Number(r[k]).toLocaleString('ja-JP'):'')+'"></td>'};
+      var c=function(q){return '<td class="c"><input type="checkbox" data-k="'+q[0]+'" data-r="'+i+'" aria-label="'+q[1]+'"'+(r[q[0]]?' checked':'')+'></td>'};
+      return '<tr><td><input class="txt" data-k="name" data-r="'+i+'" aria-label="業務の名前" value="'+esc(r.name)+'"></td>'+n('times','1か月の回数')+n('mins','1回の分数')+Q.map(c).join('')+'<td class="bal" id="h'+i+'"></td><td class="kind" id="k'+i+'"></td></tr>'
+    }).join('');
+  }
+  function onRow(t){
+    var k=t.getAttribute&&t.getAttribute('data-k');if(!k)return false;
+    var r=state.rows[+t.getAttribute('data-r')];
+    r[k]=k==='name'?t.value:(t.type==='checkbox'?t.checked:toNum(t.value));
+    return true;
+  }
+  function clearAll(){state.rows=blank()}
+  function calc(){
+    var cnt=[0,0,0],tm=[0,0,0],give=[];
+    state.rows.forEach(function(r,i){
+      var used=r.name||r.times||r.mins,m=r.times*r.mins,g=kind(r);
+      $('h'+i).textContent=m?hm(m):'';
+      $('k'+i).innerHTML=used?'<b class="'+KC[g]+'">'+KIND[g]+'</b>':'';
+      if(!used)return;
+      cnt[g]++;tm[g]+=m;
+      if(g<2)give.push({n:r.name||(i+1)+'行目',g:g,t:r.times,m:m});
+    });
+    var tot=tm[0]+tm[1]+tm[2],all=cnt[0]+cnt[1]+cnt[2];
+    $('sumRows').innerHTML=[0,1,2].map(function(g){var p=pct(tm[g],tot);
+      return '<tr><td class="lbl"><b class="'+KC[g]+'">'+KIND[g]+'</b></td><td class="bal">'+cnt[g]+'</td><td class="bal">'+hm(tm[g])+'</td><td class="bal">'+p+'%</td><td class="barc"><div class="barw"><i class="'+KC[g]+'" style="width:'+p+'%"></i></div></td></tr>'}).join('')
+      +'<tr class="total"><td class="lbl">合計</td><td class="bal">'+all+'</td><td class="bal">'+hm(tot)+'</td><td></td><td></td></tr>';
+    give.sort(function(a,b){return a.g-b.g||b.m-a.m});
+    $('orderBox').hidden=!give.length;
+    $('orderList').innerHTML=give.map(function(x){return '<li>'+esc(x.n)+'（'+KIND[x.g]+'・1か月に'+x.t+'回・'+hm(x.m)+'）</li>'}).join('');
+    if(!all){verdict(true,'業務の名前と回数を入れると、判定が出ます','');return}
+    if(!tot){verdict(true,'1か月の回数と1回の分数を入れると、時間が出ます','');return}
+    var free=tm[0]+tm[1];
+    if(!free){verdict(false,'今の印では、全部が「人が残す」に入っています','「材料を文字か数字で渡せる」は、話して文字にできる仕事にも付けます。');return}
+    var p='最初に試す仕事は「'+give[0].n+'」（'+KIND[give[0].g]+'・1か月に'+hm(give[0].m)+'）です。';
+    p+='人が残す仕事は、1か月に'+hm(tm[2])+'です。確かめる時間は残るので、この時間がそのまま空くわけではありません。';
+    verdict(true,'AIに回せる仕事は 1か月に'+hm(free)+'、全体の'+pct(free,tot)+'%です',p);
+  }
+
+  var state; try{state=JSON.parse(store(DATA_KEY)||'null')}catch(e){state=null}
+  if(!valid(state)){state=example()}
+
+  function save(){store(DATA_KEY,JSON.stringify(state))}
+  function fill(){Object.keys(FIELDS).forEach(function(k){var el=$(k);if(!el)return;var t=FIELDS[k];
+    el.value=t==='int'?fmtIn(state[k]):(t==='dec'?(state[k]?String(state[k]):''):(state[k]==null?'':state[k]))})}
+  function build(){fill();render();$('exampleNote').hidden=!state.example;calc()}
+  var used=false;
+  function touched(){state.example=false;$('exampleNote').hidden=true;save();calc();if(!used){used=true;ev('tool_use')}}
+  document.addEventListener('input',function(e){
+    var t=e.target;if(!t.id&&!t.getAttribute('data-k'))return;
+    if(FIELDS[t.id]){var k=FIELDS[t.id];state[t.id]=k==='int'?toNum(t.value):(k==='dec'?toDec(t.value):t.value);touched();return}
+    if(onRow(t))touched();
+  });
+  document.addEventListener('blur',function(e){var t=e.target;if(t.classList&&t.classList.contains('num')){
+    if(FIELDS[t.id]==='dec'){var d=toDec(t.value);t.value=d?String(d):''}else{t.value=fmtIn(toNum(t.value))}}},true);
+  $('printBtn').onclick=function(){ev('tool_print');window.print()};
+  $('clearBtn').onclick=function(){clearAll();state.example=false;save();build()};
+  $('exampleBtn').onclick=function(){state=example();save();build()};
+  $('backupBtn').onclick=function(){
+    var blob=new Blob([JSON.stringify({tool:TOOL,saved:new Date().toISOString(),data:state},null,1)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=new Date().toISOString().slice(0,10).replace(/-/g,'')+'_道具箱'+TOOL+'_'+FILE+'.json';a.click();ev('tool_backup');
+  };
+  $('restoreBtn').onclick=function(){$('restoreFile').click()};
+  $('restoreFile').onchange=function(e){
+    var f=e.target.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){try{var j=JSON.parse(r.result);if(j.tool!==TOOL||!valid(j.data))throw 0;state=j.data;save();build();ev('tool_restore')}
+      catch(x){alert('このアプリの保存ファイルではないため、読み込めませんでした。')}};
+    r.readAsText(f);e.target.value='';
+  };
+  $('consultLink').onclick=function(){ev('consult_click')};
+  $('noteLink').onclick=function(){ev('note_click')};
+  build();
+
+  // 登録（1回だけ。?preview=1 のときは出さない）
+  var preview=/[?&]preview=1/.test(location.search);
+  // 無料期間：公開日から7日間。期間中に登録して使い始めた人は、そのあとも無料（このアプリごとに記録）。
+  // 8日目からの新しい人には、有料マガジン（巻）の案内を出す。?now=YYYY-MM-DD は動作確認用。
+  var FREE_FROM='2026-11-15', FREE_DAYS=7, VOLUME='第3巻', PRICE='2,500円', CLAIM_KEY='dougubako_claim_'+TOOL;
+  var DOW='日月火水木金土';
+  var nowQ=location.search.match(/[?&]now=(\d{4}-\d{2}-\d{2})/);
+  var now=nowQ?new Date(nowQ[1]+'T12:00:00+09:00'):new Date();
+  var freeStart=new Date(FREE_FROM+'T00:00:00+09:00');
+  var freeEnd=new Date(freeStart.getTime()+FREE_DAYS*86400000); // この時刻から有料
+  var lastFree=new Date(freeEnd.getTime()-86400000);
+  var jp=function(d){var j=new Date(d.getTime()+9*3600000);return (j.getUTCMonth()+1)+'月'+j.getUTCDate()+'日（'+DOW[j.getUTCDay()]+'）'};
+  var inFree=now<freeEnd;
+  // 第3巻を買った人は合言葉で開く（巻ごとの固定の合言葉。ハッシュで照合し、1回入れたらブラウザに記録）
+  var VOL_KEY='dougubako_vol3', VOL_HASH='31738840a2f8b7b930aef0ffeb52658a0478f552bde1ab5e5db12f055e1b5f5f';
+  var owned=function(){return store(VOL_KEY)==='1'};
+  var claimed=function(){return store(CLAIM_KEY)==='1'||owned()};
+  var claim=function(){store(CLAIM_KEY,'1')};
+  if(inFree&&store(REG_KEY)==='1'&&!claimed()){claim()}
+  var dl=$('deadline');
+  if(inFree){
+    var left=Math.max(1,Math.ceil((freeEnd-Math.max(now,freeStart))/86400000));
+    dl.innerHTML='<b>無料で使えるのは '+jp(lastFree)+' まで（あと'+left+'日）</b>期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  }else if(claimed()){
+    dl.innerHTML=owned()?'<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>':'<b>無料期間中に使い始めた方は、このブラウザでそのまま無料でお使いいただけます</b>';
+  }else{
+    dl.innerHTML='<b>このアプリは「社長の道具箱 '+VOLUME+'」に収録しました</b>無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。';
+  }
+  [].forEach.call(document.querySelectorAll('.freeMsg'),function(el){
+    el.textContent='このアプリは'+jp(lastFree)+'まで無料です。期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  });
+  $('paidMsg').textContent='無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。このアプリは、noteの有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'・7本入り）でお使いいただけます。';
+  if(!preview&&!claimed()){
+    $('gate').hidden=false;
+    if(inFree){setTimeout(function(){$('expaBtn').focus()},50)}
+    else{$('regMain').hidden=true;$('paidBox').hidden=false;ev('tool_paid_view')}
+  }
+  $('magBtn').onclick=function(){ev('magazine_click')};
+  $('volForm').addEventListener('submit',function(e){
+    e.preventDefault();var pw=$('volPw').value.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).toLowerCase();
+    if(!pw){$('volErr').textContent='合言葉を入れてください。';return}
+    if(!(window.crypto&&crypto.subtle)){$('volErr').textContent='このブラウザでは確かめられません。別のブラウザでお試しください。';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){
+      var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+      if(h!==VOL_HASH){$('volErr').textContent='合言葉が違います。第3巻の記事の合言葉をそのまま入れてください。';ev('volume_pw_error');return}
+      store(VOL_KEY,'1');ev('volume_unlock',{volume:'3'});$('gate').hidden=true;
+      dl.innerHTML='<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>';
+    });
+  });
+  // 登録済みの人が別のブラウザで開いたときは、お知らせメールの合言葉で開く
+  var MEM_HASH='e9a3239db1f325b17d0d186f5d652331c6978ddf912719cd8d9be0a27f8a86e3';
+  $('memForm').addEventListener('submit',function(e){
+    e.preventDefault();var pw=$('memPw').value.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).toLowerCase();
+    if(!pw){$('memErr').textContent='合言葉を入れてください。';return}
+    if(!(window.crypto&&crypto.subtle)){$('memErr').textContent='このブラウザでは確かめられません。別のブラウザでお試しください。';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){
+      var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+      if(h!==MEM_HASH){$('memErr').textContent='合言葉が違います。お知らせメールの合言葉をそのまま入れてください。';ev('member_pw_error');return}
+      store(REG_KEY,'1');claim();ev('member_unlock');$('gate').hidden=true;
+    });
+  });
+  // 本線はエキスパのフォーム。送信後に registered.html へ移り、そこで登録済みを記録してこのアプリへ戻す
+  $('expaBtn').onclick=function(){store('dougubako_return',location.pathname);ev('tool_register_open',{via:'expa'})};
+  // 予備：エキスパのフォームが開けないときは、この画面の中で Formspree へ送る
+  $('altBtn').onclick=function(e){e.preventDefault();$('regMain').hidden=true;$('regForm').hidden=false;ev('tool_register_open',{via:'formspree'});setTimeout(function(){$('email').focus()},50)};
+  $('regForm').addEventListener('submit',function(e){
+    e.preventDefault();var err=$('regErr');err.textContent='';
+    var email=$('email').value.trim(),role=$('role').value,rev=$('revenue').value,ok=$('consent').checked;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){err.textContent='メールアドレスの形が正しくありません。';return}
+    if(!role||!rev){err.textContent='お立場と年商を選んでください。';return}
+    if(!ok){err.textContent='メールの受け取りに同意すると使えます。';return}
+    var btn=$('regBtn');btn.disabled=true;btn.textContent='送信しています…';
+    var fd=new FormData();fd.append('email',email);fd.append('立場',role);fd.append('年商',rev);
+    fd.append('メルマガ同意','同意する（'+new Date().toLocaleString('ja-JP')+'・社長の道具箱'+TOOL+'）');
+    fd.append('入口','社長の道具箱 '+TOOL);fd.append('_subject','【社長の道具箱 登録】'+TOOL);
+    fetch(FORM,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).then(function(r){
+      if(!r.ok)throw new Error('status '+r.status);
+      store(REG_KEY,'1');claim();ev('tool_register',{role:role,revenue:rev});$('gate').hidden=true;
+    }).catch(function(){
+      err.textContent='送信できませんでした。通信の状態を確かめて、もう一度押してください。';ev('tool_register_error');
+    }).finally(function(){btn.disabled=false;btn.textContent='無料のうちに登録して使う'});
+  });
+})();
+</script>
+</body>
+</html>
