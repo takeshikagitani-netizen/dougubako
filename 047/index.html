@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>理念づくりの材料シート｜社長の道具箱 047</title>
+<meta name="description" content="「これは違う」と思った実際の場面を3つ書き、大事にしたい言葉の中身と、行動指針の案を入れるアプリです。3つの場面を指針で止められるかを確かめると、言葉を足す場面が分かります。書いた内容は、そのまま材料のまとめの文章になります。登録すると、公開から7日間は無料で使えます。">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7MNCBVRLHG"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+if(/[?&](preview=1|now=)/.test(location.search))window['ga-disable-G-7MNCBVRLHG']=true;
+gtag('js',new Date());gtag('config','G-7MNCBVRLHG');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700;900&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 道具箱シリーズ共通。上に番号と名前、中央に入力できる表、右上に結論（足りなくなる週）、下に解説と相談への導線 */
+:root{
+  color-scheme:light;
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#152033; --muted:#5d6878; --line:#dde2ea;
+  --navy:#1d3557; --navy-bg:#e8eef7; --danger:#c0392b; --danger-bg:#fdecea; --ok:#1f7a4d; --ok-bg:#e3f4ea; --input:#fbfcfe;
+  --f-d:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-b:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-m:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f141c;--surface:#171e29;--ink:#e6ebf2;--muted:#9aa5b5;--line:#2a3443;--navy:#9cbbe6;--navy-bg:#1c2a40;--danger:#f08a7e;--danger-bg:#3b1f1c;--ok:#74d3a2;--ok-bg:#163327;--input:#121924}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f141c;--surface:#171e29;--ink:#e6ebf2;--muted:#9aa5b5;--line:#2a3443;--navy:#9cbbe6;--navy-bg:#1c2a40;--danger:#f08a7e;--danger-bg:#3b1f1c;--ok:#74d3a2;--ok-bg:#163327;--input:#121924}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-b);font-size:15px;line-height:1.7;padding-inline:16px;padding-block:24px 56px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:20px}
+.wrap>*{min-width:0}
+.series{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.series b{font-family:var(--f-m);color:var(--navy);background:var(--navy-bg);border-radius:4px;padding:1px 8px}
+h1{font-family:var(--f-d);font-weight:900;font-size:clamp(24px,4vw,32px);line-height:1.35;margin:4px 0 4px;text-wrap:balance}
+h2{font-family:var(--f-d);font-size:18px;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:68ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+label.f{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+input,select{font:500 15px var(--f-b);color:var(--ink);background:var(--input);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+input.num{font-family:var(--f-m);text-align:right;font-variant-numeric:tabular-nums}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.verdict{border-radius:10px;padding:16px 20px;display:grid;gap:4px}
+.verdict.bad{background:var(--danger-bg)} .verdict.good{background:var(--ok-bg)}
+.verdict b{font-family:var(--f-d);font-size:19px}
+.verdict.bad b{color:var(--danger)} .verdict.good b{color:var(--ok)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{font-size:12px;font-weight:500;color:var(--muted);text-align:right;padding:6px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:4px 6px;border-bottom:1px solid var(--line)}
+td.wk{white-space:nowrap;font-size:13.5px}
+td.bal{font-family:var(--f-m);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
+tr.low td{background:var(--danger-bg)} tr.low td.bal{color:var(--danger)}
+td input.num{padding:6px 8px;min-width:96px}
+.bar{display:flex;gap:10px;flex-wrap:wrap}
+button{font:700 14px var(--f-b);border-radius:6px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button.primary{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+.example{font-size:12px;color:var(--muted)}
+.how{display:grid;gap:10px}
+.how ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.next{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.next a{display:grid;gap:4px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.next a span{font-size:13px;color:var(--muted)}
+.next a b{font-family:var(--f-d);font-size:16px;color:var(--navy)}
+footer{font-size:12px;color:var(--muted);display:grid;gap:4px}
+footer a{color:var(--muted)}
+/* 002以降で足した部品 */
+h2.sub{font-size:16px;margin:0 0 10px}
+table.flow{min-width:0}
+tr.total td{font-weight:700;border-top:2px solid var(--line)}
+td.neg{color:var(--danger);background:var(--danger-bg)}
+td.lbl{font-size:13.5px;min-width:120px}
+label.mini{display:grid;gap:2px;font-size:12px;color:var(--muted)}
+small.note{display:block;font-size:11.5px;color:var(--muted);font-family:var(--f-b);font-weight:400}
+td input.txt{min-width:110px}
+.settings.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:700px){.settings.two{grid-template-columns:1fr}}
+table.chk{min-width:520px}
+table.chk th:not(:first-child){text-align:center}
+td.c{text-align:center;width:96px}
+td.c input{width:auto}
+tr.miss td.lbl{background:var(--danger-bg)}
+tr.na td.lbl{color:var(--muted)}
+#list{display:grid;gap:18px}
+/* 登録 */
+.gate{position:fixed;inset:0;background:rgba(10,16,26,.55);display:grid;place-items:center;padding:16px;z-index:10}
+.gate[hidden],.gate .box[hidden]{display:none}
+.deadline{margin-top:10px;background:var(--danger-bg);color:var(--ink);border:1px solid var(--danger);border-radius:8px;padding:10px 14px;font-size:14px;max-width:68ch}
+.deadline:empty{display:none}
+.deadline b{display:block;color:var(--danger);font-size:16px}
+a.primary{display:block;text-align:center;text-decoration:none;font-weight:700;border-radius:8px;padding:12px 16px;background:var(--navy);color:var(--surface)}
+.gate .box{background:var(--surface);color:var(--ink);border-radius:12px;max-width:460px;width:100%;padding:24px;display:grid;gap:14px;max-height:100%;overflow:auto}
+.gate h2{font-size:20px}
+.gate .err{color:var(--danger);font-size:13px;min-height:1em}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+.check input{width:auto;margin-top:4px}
+/* 047 */
+table.sort{min-width:1000px}
+table.sort th:first-child{min-width:230px}
+table.sum{min-width:420px}
+.settings.def{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
+.settings.gl{grid-template-columns:1fr}
+@media (max-width:700px){.settings.def{grid-template-columns:1fr}}
+table.sort td textarea{width:100%;min-width:170px;min-height:52px;font:inherit;font-size:14px;line-height:1.5;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--input);color:var(--ink);resize:vertical}
+table.sort td select{min-width:120px;padding:6px 6px;font-size:13.5px}
+table.sort td input.txt{min-width:110px;width:100%}
+textarea#out{width:100%;min-height:260px;font:inherit;font-size:14px;line-height:1.6;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--input);color:var(--ink)}
+#copyMsg{margin-left:8px;font-size:13px;color:var(--ok)}
+.settings textarea{width:100%;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--input);color:var(--ink)}
+input.dnum{font-family:var(--f-m);text-align:right}
+.mok{background:var(--ok-bg)!important;color:var(--ok)!important}
+.barw i.mok{background:var(--ok)!important}
+table.sort{min-width:900px}
+table.sort th,table.sort td{padding-left:4px;padding-right:4px}
+table.sort th{font-size:11.5px}
+table.sort th{white-space:normal;text-align:center;vertical-align:bottom;line-height:1.35}
+table.sort th:first-child{text-align:left;min-width:170px}
+table.sort td input.num{min-width:48px;width:52px}
+table.sort td.c{width:62px}
+td.kind{text-align:center;white-space:nowrap}
+td.kind b{display:inline-block;border-radius:4px;padding:0 8px;font-size:12.5px}
+#orderList:empty{display:none}
+#orderList{margin:8px 0 0;padding-left:1.4em;font-size:14px}
+/* 011 時間家計簿 */
+:root{--amber:#8a5a00;--amber-bg:#fdf0d5;--gray-bg:#e9ecf1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--amber:#f0c26e;--amber-bg:#3a2d12;--gray-bg:#262f3c}}
+:root[data-theme="dark"]{--amber:#f0c26e;--amber-bg:#3a2d12;--gray-bg:#262f3c}
+.palette{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.palette span{font-size:13px;color:var(--muted)}
+.palette button{padding:7px 12px}
+.palette button[aria-pressed="true"]{outline:2px solid var(--navy);outline-offset:1px}
+.m1{background:var(--navy-bg)!important;color:var(--navy)!important}
+.m2{background:var(--danger-bg)!important;color:var(--danger)!important}
+.m3{background:var(--amber-bg)!important;color:var(--amber)!important}
+.m4{background:var(--gray-bg)!important;color:var(--muted)!important}
+table.grid{min-width:600px;table-layout:fixed}
+table.grid th{text-align:center;padding:4px 2px;font-size:11.5px}
+table.grid th:first-child,table.grid td.tm{width:58px;position:sticky;left:0;background:var(--surface);text-align:left}
+table.grid td{padding:1px 2px;border-bottom:0}
+table.grid td.tm{font-family:var(--f-m);font-size:12px;white-space:nowrap}
+table.grid td.tm.hot{color:var(--danger);font-weight:700}
+table.grid td.cnt{font-family:var(--f-m);font-size:12px;text-align:center;color:var(--muted)}
+button.cell{display:block;width:100%;height:26px;padding:0;font:700 12px var(--f-b);border-radius:4px;border:1px solid var(--line);background:var(--input);color:var(--muted)}
+table.sum{min-width:480px}
+table.sum td.lbl b{display:inline-block;border-radius:4px;padding:0 8px;font-size:13px}
+td.barc{width:34%}
+.barw{height:12px;background:var(--bg);border-radius:3px;overflow:hidden}
+.barw i{display:block;height:100%}
+.barw i.m1{background:var(--navy)!important}.barw i.m2{background:var(--danger)!important}.barw i.m3{background:var(--amber)!important}.barw i.m4{background:var(--muted)!important}
+#bandNote:empty,#earlyNote:empty{display:none}
+#bandNote,#earlyNote{font-size:14px;margin-top:8px}
+@media (max-width:700px){.settings,.next{grid-template-columns:1fr}.card{padding:16px}}
+@media print{.palette,.gate,.bar,.next,footer,.how,.deadline{display:none!important}body{background:#fff}.m1,.m2,.m3,.m4,.mok,button.cell{-webkit-print-color-adjust:exact;print-color-adjust:exact}table.grid th:first-child,table.grid td.tm{position:static}tr.miss td.lbl{font-weight:700}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="series"><b>047</b><span>社長の道具箱 100日</span></div>
+    <h1>理念づくりの材料シート</h1>
+    <p class="lead">「これは違う」と思った実際の場面を3つ書き、大事にしたい言葉の中身と、行動指針の案を入れるアプリです。3つの場面を指針で止められるかを確かめると、言葉を足す場面が分かります。書いた内容は、そのまま材料のまとめの文章になります。入れた内容はこのブラウザの中にだけ保存され、外には送られません。</p>
+    <p class="deadline" id="deadline"></p>
+  </header>
+
+  <div class="verdict" id="verdict" role="status" aria-live="polite"><b></b><p></p></div>
+
+  <section class="card" aria-label="1. 「これは違う」と思った場面（3つ）">
+    <h2 class="sub">1. 「これは違う」と思った場面（3つ）</h2>
+    <div class="tbl">
+      <table class="sort">
+        <thead><tr><th>「これは違う」と思った場面</th><th>なぜ違うと思ったか</th><th>本当はどうしてほしかったか</th><th>この場面を止める指針</th><th>状態</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="example">場面は、実際にあったことを書きます。人の名前は書かなくてかまいません。</p>
+    <p class="example">「この場面を止める指針」は、下の指針の案を書いてから選びます。止める指針がなければ「まだない」のままにします。</p>
+    <p class="example" id="exampleNote">最初に入っている内容は例です。「内容を全部消す」を押してから、ご自身の内容を入れてください。</p>
+  </section>
+
+  <section class="card" aria-label="言葉の中身">
+    <h2 class="sub">2. 大事にしたい言葉の中身</h2>
+    <div class="settings def">
+      <label class="f" for="word">大事にしたい言葉（例：誠実）<input class="txt" id="word"></label>
+      <label class="f" for="def">その言葉の中身を1行で<input class="txt" id="def"></label>
+    </div>
+  </section>
+
+  <section class="card" aria-label="行動指針の案">
+    <h2 class="sub">3. 行動指針の案（3〜5行）</h2>
+    <div class="settings gl">
+      <label class="f" for="g1">指針1<input class="txt" id="g1"></label>
+      <label class="f" for="g2">指針2<input class="txt" id="g2"></label>
+      <label class="f" for="g3">指針3<input class="txt" id="g3"></label>
+      <label class="f" for="g4">指針4<input class="txt" id="g4"></label>
+      <label class="f" for="g5">指針5<input class="txt" id="g5"></label>
+    </div>
+  </section>
+
+  <section class="card" aria-label="4. 場面を止められるか">
+    <h2 class="sub">4. 場面を止められるか</h2>
+    <div class="tbl">
+      <table class="sum">
+        <thead><tr><th>状態</th><th>件数</th><th>割合</th><th></th></tr></thead>
+        <tbody id="sumRows"></tbody>
+      </table>
+    </div>
+    <div id="orderBox" hidden>
+      <h2 class="sub" style="margin-top:14px">指針で止められない場面</h2>
+      <ol id="orderList"></ol>
+    </div>
+  </section>
+
+  <section class="card" aria-label="材料のまとめ">
+    <h2 class="sub">材料のまとめ</h2>
+    <textarea id="out" readonly aria-label="材料のまとめ"></textarea>
+    <p style="margin-top:8px"><button type="button" id="copyBtn">文章をコピーする</button><span id="copyMsg"></span></p>
+  </section>
+
+  <div class="bar">
+    <button type="button" class="primary" id="printBtn">印刷・PDFにする</button>
+    <button type="button" id="clearBtn">内容を全部消す</button>
+    <button type="button" id="exampleBtn">例に戻す</button>
+    <button type="button" id="backupBtn">データをファイルに保存</button>
+    <button type="button" id="restoreBtn">保存したファイルを読み込む</button>
+    <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+  </div>
+  <p class="example">入れた内容はこのパソコンのブラウザに残ります。別のパソコンで使うときや、ブラウザの履歴を消す前は「データをファイルに保存」で控えを取っておけます。</p>
+
+  <section class="card how" aria-labelledby="how-h">
+    <h2 id="how-h">使い方のコツ</h2>
+    <ul>
+      <li>順番は、場面を書く、言葉の中身を決める、指針を書く、場面を止められるか確かめる、です。指針の文を先に整えると、きれいな文でも何も止められません。</li>
+      <li>場面は、社長が「これは違う」と感じた、実際の出来事を書きます。</li>
+      <li>「本当はどうしてほしかったか」の欄が、指針の言葉の材料になります。</li>
+      <li>止められない場面が残ったら、その場面だけ、指針に言葉を足します。経営理念の文は、そのまま残してかまいません。</li>
+    </ul>
+    <p class="example">最初に入っている場面・言葉・指針は例です。</p>
+  </section>
+
+  <nav class="next" aria-label="関連">
+    <a id="noteLink" href="https://note.com/kagitani"><span>このアプリの解説記事（note）</span><b>記事を読む</b></a>
+    <a id="consultLink" href="https://takeshikagitani-netizen.github.io/kagitani-consulting/?utm_source=dougubako&amp;utm_medium=tool&amp;utm_campaign=047"><span>経営理念と行動指針を、会社に合わせて作りたい方へ</span><b>初回30分の枠を用意しています</b></a>
+  </nav>
+
+  <footer>
+    <div>社長の道具箱 100日｜鍵谷健（ビーレジェンド創業者・経営コンサルタント）</div>
+    <div><a href="../privacy.html">プライバシーポリシー</a></div>
+  </footer>
+</div>
+
+<div class="gate" id="gate" hidden>
+  <div class="box" id="regMain">
+    <h2>はじめに1回だけ登録してください</h2>
+    <p class="lead freeMsg"></p>
+    <p class="example">毎日1本公開する新しいアプリも、メールでお知らせします。</p>
+    <a class="primary" id="expaBtn" href="https://ex-tri-f1.com/fm/32705/OoJF4yOH">無料のうちに登録して使う（1分）</a>
+    <p class="example">登録が終わると、このアプリに戻って使えます。</p>
+    <form id="memForm" novalidate>
+      <label class="f" for="memPw">登録済みの方は、お知らせメールの合言葉を入れてください<input id="memPw" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="err" id="memErr"></p>
+      <button type="submit">合言葉で開く</button>
+    </form>
+    <p class="example"><a href="#" id="altBtn">フォームが開かないときは、こちらから登録できます</a></p>
+    <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
+  </div>
+  <div class="box" id="paidBox" hidden>
+    <h2>このアプリは「社長の道具箱 第7巻」に収録しました</h2>
+    <p class="lead" id="paidMsg"></p>
+    <a class="primary" id="magBtn" href="https://note.com/kagitani/m/m2527e078ffac">第7巻（2,500円）をnoteで見る</a>
+    <form id="volForm" novalidate>
+      <label class="f" for="volPw">第7巻をお買い上げの方は、合言葉を入れてください<input id="volPw" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="err" id="volErr"></p>
+      <button type="submit" class="primary">合言葉で開く</button>
+      <p class="example">合言葉は、第7巻の中の記事「第7巻の使い方と合言葉」に書いてあります。1回入れると、このブラウザでは7本とも開きます。</p>
+    </form>
+    <p class="example">無料期間中に登録して使い始めた方は、そのときと同じブラウザで開くと、そのままお使いいただけます。</p>
+    <p class="example">新しいアプリは毎日お昼12時に公開しています。公開から7日間は無料です。</p>
+  </div>
+  <form class="box" id="regForm" novalidate hidden>
+    <h2>はじめに1回だけ登録してください</h2>
+    <p class="lead freeMsg"></p>
+    <label class="f" for="email">メールアドレス<input type="email" id="email" name="email" autocomplete="email" required></label>
+    <label class="f" for="role">お立場
+      <select id="role" name="role" required>
+        <option value="">選んでください</option><option>経営者</option><option>個人事業主</option><option>会社員</option><option>その他</option>
+      </select>
+    </label>
+    <label class="f" for="revenue">会社の年商
+      <select id="revenue" name="revenue" required>
+        <option value="">選んでください</option><option>3,000万円未満</option><option>3,000万〜1億円</option><option>1億〜3億円</option><option>3億〜10億円</option><option>10億円以上</option><option>答えない</option>
+      </select>
+    </label>
+    <label class="check" for="consent"><input type="checkbox" id="consent" name="consent" required><span>鍵谷健からのメール（新しいアプリのお知らせ・仕事の話）を受け取ることに同意します。いつでも配信を止められます。</span></label>
+    <p class="err" id="regErr"></p>
+    <button type="submit" class="primary" id="regBtn">無料のうちに登録して使う</button>
+    <p class="example"><a href="../privacy.html">プライバシーポリシー</a></p>
+  </form>
+</div>
+
+<script>
+(function(){
+  var TOOL='047', REG_KEY='dougubako_registered', DATA_KEY='dougubako_047_v1';
+  var FORM='https://formspree.io/f/mykbblvr';
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+  function ev(name,p){try{gtag('event',name,Object.assign({tool:TOOL},p||{}))}catch(e){}}
+  var $=function(id){return document.getElementById(id)};
+  var yen=function(n){return (n<0?'-':'')+'¥'+Math.abs(Math.round(n)).toLocaleString('ja-JP')};
+  var sgn=function(n){return (Math.round(n)>0?'+':'')+yen(n)};
+  var toNum=function(s){var n=parseInt(String(s||'').replace(/[^\d-]/g,''),10);return isNaN(n)?0:n};
+  var toDec=function(s){var n=parseFloat(String(s==null?'':s).replace(/[^\d.\-]/g,''));return isNaN(n)?0:n};
+  var fmtIn=function(n){return n?Number(n).toLocaleString('ja-JP'):''};
+  var fix1=function(n){return (Math.round(n*10)/10).toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})};
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  function verdict(good,b,p){var v=$('verdict');v.className='verdict '+(good?'good':'bad');v.querySelector('b').textContent=b;v.querySelector('p').textContent=p||''}
+
+  var FILE='理念づくりの材料シート';
+  var ad=function(n){var d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)};
+  var late=function(s){return Math.round((new Date(ad(0)+'T00:00:00')-new Date(s+'T00:00:00'))/864e5)};
+  var jd=function(s){var p=String(s).split('-');return p.length===3?(+p[1])+'月'+(+p[2])+'日':''};
+  var yen=function(n){return Math.round(n).toLocaleString('ja-JP')+'円'};
+  var pct=function(n,t){return t?Math.round(n/t*100):0};
+  var tx=function(r,i,k,l){return '<td><input class="txt" data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'" value="'+esc(r[k])+'"></td>'};
+  var dt=function(r,i,k,l){return '<td><input class="txt" type="date" data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'" value="'+esc(r[k])+'"></td>'};
+  var nm=function(r,i,k,l){return '<td><input class="num" inputmode="numeric" data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'" value="'+(r[k]?Number(r[k]).toLocaleString('ja-JP'):'')+'"></td>'};
+  var cb=function(r,i,k,l){return '<td class="c"><input type="checkbox" data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'"'+(r[k]?' checked':'')+'></td>'};
+  var tag=function(c,t){return '<b class="'+c+'">'+t+'</b>'};
+  function sumRows(names,cls,cnt,unit){var tot=cnt.reduce(function(a,b){return a+b},0);
+    $('sumRows').innerHTML=names.map(function(n,g){var p=pct(cnt[g],tot);
+      return '<tr><td class="lbl"><b class="'+cls[g]+'">'+n+'</b></td><td class="bal">'+cnt[g]+'</td><td class="bal">'+p+'%</td><td class="barc"><div class="barw"><i class="'+cls[g]+'" style="width:'+p+'%"></i></div></td></tr>'}).join('')
+      +'<tr class="total"><td class="lbl">合計</td><td class="bal">'+tot+'</td><td></td><td></td></tr>';}
+  function onRowText(t,nums){var k=t.getAttribute&&t.getAttribute('data-k');if(!k)return false;
+    var r=state.rows[+t.getAttribute('data-r')];
+    r[k]=t.type==='checkbox'?t.checked:(nums.indexOf(k)>=0?toNum(t.value):t.value);return true;}
+  var dn=function(r,i,k,l){return '<td><input class="num dnum" inputmode="decimal" data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'" value="'+(r[k]?String(r[k]):'')+'"></td>'};
+  var f1=function(n){return (Math.round(n*10)/10).toLocaleString('ja-JP')};
+  var man=function(n){return f1(n)+'万円'};
+  function onRowMix(t,nums,decs){var k=t.getAttribute&&t.getAttribute('data-k');if(!k)return false;
+    var r=state.rows[+t.getAttribute('data-r')];
+    r[k]=t.type==='checkbox'?t.checked:(decs.indexOf(k)>=0?toDec(t.value):(nums.indexOf(k)>=0?toNum(t.value):t.value));return true;}
+  var ta=function(r,i,k,l){return '<td><textarea class="txt" rows="2" data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'">'+esc(r[k])+'</textarea></td>'};
+  var sl=function(r,i,k,l,opts,id){return '<td><select data-k="'+k+'" data-r="'+i+'" aria-label="'+l+'"'+(id?' id="'+id+'"':'')+'>'+opts.map(function(o,j){return '<option value="'+j+'"'+((+r[k]||0)===j?' selected':'')+'>'+esc(o)+'</option>'}).join('')+'</select></td>'};
+  var cut=function(s,n){s=String(s||'');return s.length>n?s.slice(0,n)+'…':s};
+  function copyOut(){var o=$('out');o.select();
+    var done=function(){$('copyMsg').textContent='コピーしました';setTimeout(function(){$('copyMsg').textContent=''},2000)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(o.value).then(done,function(){document.execCommand('copy');done()})}else{document.execCommand('copy');done()}
+    ev('tool_copy')}
+  var FIELDS={word:'txt',def:'txt',g1:'txt',g2:'txt',g3:'txt',g4:'txt',g5:'txt'};
+  var ROWS=3, KIND=['止められる','止められない','書きかけ'], KC=['mok','m2','m4'];
+  function row(a,b,c,d){return {scene:a,why:b,want:c,g:d}}
+  function blank(){var r=[];for(var i=0;i<ROWS;i++)r.push(row('','','',0));return r}
+  function example(){
+    var r=[row('見積もりの金額を間違えたのに、お客様に言わずに、次の請求で調整した','間違いを隠して、自分の中で片づけた','間違えたら、その日のうちにお客様と上司に伝える',1),
+      row('クレームの電話を、担当がいないからと翌日まで折り返さなかった','お客様を待たせたまま、誰も動かなかった','担当でなくても、その日のうちに一度連絡する',2),
+      row('会議で決まったことを、反対だったスタッフがやらないままにしていた','反対なら、会議の場で言うべきだった','反対はその場で言う。決まったら、やる',0)];
+    return {word:'誠実',def:'間違いや遅れを、相手が知る前にこちらから伝えること',
+      g1:'間違いに気づいたら、その日のうちに、お客様と上司に自分から伝える',g2:'お客様からの連絡は、担当でなくても、その日のうちに一度返す',g3:'分からないことは、その日のうちに聞く',g4:'',g5:'',rows:r,example:true}}
+  function valid(s){return !!(s&&s.rows&&s.rows.length===ROWS&&'word' in s)}
+  function gtxt(j){return String(state['g'+j]||'').trim()}
+  function opts(){var o=['まだない'];for(var j=1;j<=5;j++){var t=gtxt(j);o.push('指針'+j+(t?'：'+cut(t,14):'（空）'))}return o}
+  function render(){
+    $('copyBtn').onclick=copyOut;
+    var o=opts();
+    $('rows').innerHTML=state.rows.map(function(r,i){
+      return '<tr>'+ta(r,i,'scene','これは違うと思った場面')+ta(r,i,'why','なぜ違うと思ったか')+ta(r,i,'want','本当はどうしてほしかったか')+sl(r,i,'g','この場面を止める指針',o,'s'+i)+'<td class="kind" id="k'+i+'"></td></tr>'
+    }).join('');
+  }
+  function onRow(t){return onRowText(t,['g'])}
+  function clearAll(){state.rows=blank();state.word='';state.def='';for(var j=1;j<=5;j++)state['g'+j]=''}
+  function calc(){
+    var c=[0,0,0],ng=[],txt=[],o=opts(),gl=0;
+    for(var j=1;j<=5;j++)if(gtxt(j))gl++;
+    txt.push('【理念づくりの材料】');txt.push('');txt.push('■「これは違う」と思った場面');
+    state.rows.forEach(function(r,i){
+      var sel=$('s'+i);if(sel)for(var j=0;j<sel.options.length;j++)sel.options[j].textContent=o[j];
+      var sc=String(r.scene||'').trim(),w=String(r.want||'').trim(),gi=+r.g||0,gt=gi?gtxt(gi):'';
+      $('k'+i).innerHTML='';
+      if(!sc&&!w&&!String(r.why||'').trim())return;
+      var g=(!sc||!w)?2:(gt?0:1);
+      c[g]++;$('k'+i).innerHTML=tag(KC[g],KIND[g]);
+      if(g===1)ng.push('「'+cut(sc,30)+'」');
+      txt.push((i+1)+'. '+(sc||'（場面がまだ）'));
+      txt.push('　なぜ違うと思ったか：'+(r.why||''));
+      txt.push('　本当はどうしてほしかったか：'+(w||''));
+      txt.push('　止める指針：'+(gt?'指針'+gi+'（'+gt+'）':'まだない'));
+    });
+    txt.push('');txt.push('■大事にしたい言葉の中身');
+    txt.push(state.word?'「'+state.word+'」とは、'+(state.def||'（中身がまだ）'):'（まだ）');
+    txt.push('');txt.push('■行動指針（案）');
+    var k=0;for(var j=1;j<=5;j++){var t=gtxt(j);if(t){k++;txt.push(k+'. '+t)}}
+    if(!k)txt.push('（まだ）');
+    sumRows(KIND,KC,c);
+    $('out').value=txt.join('\n');
+    $('orderBox').hidden=!ng.length;
+    $('orderList').innerHTML=ng.map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
+    var n=c[0]+c[1];
+    if(!(n+c[2])){verdict(true,'「これは違う」と思った場面を書くと、材料づくりが始まります','');return}
+    var p='';
+    if(ng.length)p+=ng[0]+(ng.length>1?'ほか'+(ng.length-1)+'場面':'')+'を止める指針がありません。「本当はどうしてほしかったか」の欄を材料に、この場面だけ指針に言葉を足します。';
+    if(c[2])p+='場面か「本当はどうしてほしかったか」が空の行が'+c[2]+'行あります。';
+    if(n+c[2]<ROWS)p+='場面は3つ書きます（今は'+(n+c[2])+'つ）。';
+    if(!String(state.def||'').trim())p+='大事にしたい言葉の中身が、まだ決まっていません。';
+    if(gl<3||gl>5)p+='行動指針は3〜5行が目安です（今は'+gl+'行）。';
+    verdict(c[0]===ROWS,(n+c[2])+'つの場面のうち、指針で止められるのは '+c[0]+'場面です',p);
+  }
+
+  var state; try{state=JSON.parse(store(DATA_KEY)||'null')}catch(e){state=null}
+  if(!valid(state)){state=example()}
+
+  function save(){store(DATA_KEY,JSON.stringify(state))}
+  function fill(){Object.keys(FIELDS).forEach(function(k){var el=$(k);if(!el)return;var t=FIELDS[k];
+    el.value=t==='int'?fmtIn(state[k]):(t==='dec'?(state[k]?String(state[k]):''):(state[k]==null?'':state[k]))})}
+  function build(){fill();render();$('exampleNote').hidden=!state.example;calc()}
+  var used=false;
+  function touched(){state.example=false;$('exampleNote').hidden=true;save();calc();if(!used){used=true;ev('tool_use')}}
+  document.addEventListener('input',function(e){
+    var t=e.target;if(!t.id&&!t.getAttribute('data-k'))return;
+    if(FIELDS[t.id]){var k=FIELDS[t.id];state[t.id]=k==='int'?toNum(t.value):(k==='dec'?toDec(t.value):t.value);touched();return}
+    if(onRow(t))touched();
+  });
+  document.addEventListener('blur',function(e){var t=e.target;if(t.classList&&t.classList.contains('num')&&!t.classList.contains('dnum')){
+    if(FIELDS[t.id]==='dec'){var d=toDec(t.value);t.value=d?String(d):''}else{t.value=fmtIn(toNum(t.value))}}},true);
+  $('printBtn').onclick=function(){ev('tool_print');window.print()};
+  $('clearBtn').onclick=function(){clearAll();state.example=false;save();build()};
+  $('exampleBtn').onclick=function(){state=example();save();build()};
+  $('backupBtn').onclick=function(){
+    var blob=new Blob([JSON.stringify({tool:TOOL,saved:new Date().toISOString(),data:state},null,1)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=new Date().toISOString().slice(0,10).replace(/-/g,'')+'_道具箱'+TOOL+'_'+FILE+'.json';a.click();ev('tool_backup');
+  };
+  $('restoreBtn').onclick=function(){$('restoreFile').click()};
+  $('restoreFile').onchange=function(e){
+    var f=e.target.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){try{var j=JSON.parse(r.result);if(j.tool!==TOOL||!valid(j.data))throw 0;state=j.data;save();build();ev('tool_restore')}
+      catch(x){alert('このアプリの保存ファイルではないため、読み込めませんでした。')}};
+    r.readAsText(f);e.target.value='';
+  };
+  $('consultLink').onclick=function(){ev('consult_click')};
+  $('noteLink').onclick=function(){ev('note_click')};
+  build();
+
+  // 登録（1回だけ。?preview=1 のときは出さない）
+  var preview=/[?&]preview=1/.test(location.search);
+  // 無料期間：公開日から7日間。期間中に登録して使い始めた人は、そのあとも無料（このアプリごとに記録）。
+  // 8日目からの新しい人には、有料マガジン（巻）の案内を出す。?now=YYYY-MM-DD は動作確認用。
+  var FREE_FROM='2026-12-17', FREE_DAYS=7, VOLUME='第7巻', PRICE='2,500円', CLAIM_KEY='dougubako_claim_'+TOOL;
+  var DOW='日月火水木金土';
+  var nowQ=location.search.match(/[?&]now=(\d{4}-\d{2}-\d{2})/);
+  var now=nowQ?new Date(nowQ[1]+'T12:00:00+09:00'):new Date();
+  var freeStart=new Date(FREE_FROM+'T00:00:00+09:00');
+  var freeEnd=new Date(freeStart.getTime()+FREE_DAYS*86400000); // この時刻から有料
+  var lastFree=new Date(freeEnd.getTime()-86400000);
+  var jp=function(d){var j=new Date(d.getTime()+9*3600000);return (j.getUTCMonth()+1)+'月'+j.getUTCDate()+'日（'+DOW[j.getUTCDay()]+'）'};
+  var inFree=now<freeEnd;
+  // 第7巻を買った人は合言葉で開く（巻ごとの固定の合言葉。ハッシュで照合し、1回入れたらブラウザに記録）
+  var VOL_KEY='dougubako_vol7', VOL_HASH='3c998934ac2bde98b4ffc2256359f1b8fdc54c5a066929525ea97fe562ba8fcb';
+  var owned=function(){return store(VOL_KEY)==='1'};
+  var claimed=function(){return store(CLAIM_KEY)==='1'||owned()};
+  var claim=function(){store(CLAIM_KEY,'1')};
+  if(inFree&&store(REG_KEY)==='1'&&!claimed()){claim()}
+  var dl=$('deadline');
+  if(inFree){
+    var left=Math.max(1,Math.ceil((freeEnd-Math.max(now,freeStart))/86400000));
+    dl.innerHTML='<b>無料で使えるのは '+jp(lastFree)+' まで（あと'+left+'日）</b>期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  }else if(claimed()){
+    dl.innerHTML=owned()?'<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>':'<b>無料期間中に使い始めた方は、このブラウザでそのまま無料でお使いいただけます</b>';
+  }else{
+    dl.innerHTML='<b>このアプリは「社長の道具箱 '+VOLUME+'」に収録しました</b>無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。';
+  }
+  [].forEach.call(document.querySelectorAll('.freeMsg'),function(el){
+    el.textContent='このアプリは'+jp(lastFree)+'まで無料です。期間中に登録して使い始めると、そのあとも無料で使えます。'+jp(freeEnd)+'からは、有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'）でのご提供になります。';
+  });
+  $('paidMsg').textContent='無料で使える期間（'+jp(freeStart)+'〜'+jp(lastFree)+'）は終わりました。このアプリは、noteの有料マガジン「社長の道具箱 '+VOLUME+'」（'+PRICE+'・7本入り）でお使いいただけます。';
+  if(!preview&&!claimed()){
+    $('gate').hidden=false;
+    if(inFree){setTimeout(function(){$('expaBtn').focus()},50)}
+    else{$('regMain').hidden=true;$('paidBox').hidden=false;ev('tool_paid_view')}
+  }
+  $('magBtn').onclick=function(){ev('magazine_click')};
+  $('volForm').addEventListener('submit',function(e){
+    e.preventDefault();var pw=$('volPw').value.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).toLowerCase();
+    if(!pw){$('volErr').textContent='合言葉を入れてください。';return}
+    if(!(window.crypto&&crypto.subtle)){$('volErr').textContent='このブラウザでは確かめられません。別のブラウザでお試しください。';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){
+      var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+      if(h!==VOL_HASH){$('volErr').textContent='合言葉が違います。第7巻の記事の合言葉をそのまま入れてください。';ev('volume_pw_error');return}
+      store(VOL_KEY,'1');ev('volume_unlock',{volume:'7'});$('gate').hidden=true;
+      dl.innerHTML='<b>「社長の道具箱 '+VOLUME+'」の合言葉で開いています</b>';
+    });
+  });
+  // 登録済みの人が別のブラウザで開いたときは、お知らせメールの合言葉で開く
+  var MEM_HASH='e9a3239db1f325b17d0d186f5d652331c6978ddf912719cd8d9be0a27f8a86e3';
+  $('memForm').addEventListener('submit',function(e){
+    e.preventDefault();var pw=$('memPw').value.trim().replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).toLowerCase();
+    if(!pw){$('memErr').textContent='合言葉を入れてください。';return}
+    if(!(window.crypto&&crypto.subtle)){$('memErr').textContent='このブラウザでは確かめられません。別のブラウザでお試しください。';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){
+      var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+      if(h!==MEM_HASH){$('memErr').textContent='合言葉が違います。お知らせメールの合言葉をそのまま入れてください。';ev('member_pw_error');return}
+      store(REG_KEY,'1');claim();ev('member_unlock');$('gate').hidden=true;
+    });
+  });
+  // 本線はエキスパのフォーム。送信後に registered.html へ移り、そこで登録済みを記録してこのアプリへ戻す
+  $('expaBtn').onclick=function(){store('dougubako_return',location.pathname);ev('tool_register_open',{via:'expa'})};
+  // 予備：エキスパのフォームが開けないときは、この画面の中で Formspree へ送る
+  $('altBtn').onclick=function(e){e.preventDefault();$('regMain').hidden=true;$('regForm').hidden=false;ev('tool_register_open',{via:'formspree'});setTimeout(function(){$('email').focus()},50)};
+  $('regForm').addEventListener('submit',function(e){
+    e.preventDefault();var err=$('regErr');err.textContent='';
+    var email=$('email').value.trim(),role=$('role').value,rev=$('revenue').value,ok=$('consent').checked;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){err.textContent='メールアドレスの形が正しくありません。';return}
+    if(!role||!rev){err.textContent='お立場と年商を選んでください。';return}
+    if(!ok){err.textContent='メールの受け取りに同意すると使えます。';return}
+    var btn=$('regBtn');btn.disabled=true;btn.textContent='送信しています…';
+    var fd=new FormData();fd.append('email',email);fd.append('立場',role);fd.append('年商',rev);
+    fd.append('メルマガ同意','同意する（'+new Date().toLocaleString('ja-JP')+'・社長の道具箱'+TOOL+'）');
+    fd.append('入口','社長の道具箱 '+TOOL);fd.append('_subject','【社長の道具箱 登録】'+TOOL);
+    fetch(FORM,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).then(function(r){
+      if(!r.ok)throw new Error('status '+r.status);
+      store(REG_KEY,'1');claim();ev('tool_register',{role:role,revenue:rev});$('gate').hidden=true;
+    }).catch(function(){
+      err.textContent='送信できませんでした。通信の状態を確かめて、もう一度押してください。';ev('tool_register_error');
+    }).finally(function(){btn.disabled=false;btn.textContent='無料のうちに登録して使う'});
+  });
+})();
+</script>
+</body>
+</html>
