@@ -14,7 +14,7 @@ if(!ok){window.P='no img btn';return}
 window.P='header';const hr=await NoteAuto.setHeaderImage(IMG,'image/jpeg');await W(2000);
 window.P='publish';await NoteAuto.gotoPublish();await W(3000);NoteAuto.addHashtags(ART.tags);
 for(let i=0;i<90;i++){await W(1000);const p=NoteAuto.tagProgress();if(p.done||p.err)break}
-window.P='date';const r=await pickD(d);
+window.P='date';let r;for(let z=0;z<3;z++){try{r=await pickD(d)}catch(e){r='err '+e;await W(1500)}if(r===d+' 12:00')break}
 const st=async()=>{const j=await fetch('https://note.com/api/v3/notes/'+NK,{credentials:'include'}).then(r=>r.json());return j.data};
 let s=await st();const pre=[(s.body||'').split('▼今日のアプリ').length-1,!!s.eyecatch,JSON.stringify(NoteAuto.tagProgress())];
 if(!(r===d+' 12:00'&&pre[0]===1&&pre[1])){window.P='stop:'+r+' '+JSON.stringify(pre)+' '+NK;return}
